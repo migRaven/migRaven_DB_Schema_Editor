@@ -1,0 +1,5339 @@
+{
+  "schema_export_info": {
+    "export_date": "2025-05-24",
+    "database_type": "Neo4j",
+    "system": "migRaven",
+    "purpose": "Schema documentation and LLM training",
+    "total_node_types": 52
+  },
+  "node_types": [
+    {
+      "label": "TaskGroup",
+      "description": "",
+      "attributes": {
+        "taskgroupstate": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "taskgroupguid": {
+          "type": "STRING", 
+          "indexed": false,
+          "description": ""
+        }
+      },
+      "relationships": {
+        "rel_taskgroup": {
+          "target": "TaskGraph",
+          "description": ""
+        },
+        "rel_taskgroupmap": {
+          "target": "TaskGroup",
+          "description": ""
+        }
+      }
+    },
+    {
+      "label": "Scans",
+      "description": "",
+      "attributes": {
+        "activeUsers": {
+          "type": "INTEGER",
+          "indexed": false,
+          "description": ""
+        },
+        "computers": {
+          "type": "INTEGER",
+          "indexed": false,
+          "description": ""
+        },
+        "revision": {
+          "type": "INTEGER",
+          "indexed": true,
+          "description": ""
+        },
+        "time": {
+          "type": "DATE_TIME",
+          "indexed": true,
+          "description": ""
+        },
+        "active90Days": {
+          "type": "INTEGER",
+          "indexed": false,
+          "description": ""
+        },
+        "universalGroups": {
+          "type": "INTEGER",
+          "indexed": false,
+          "description": ""
+        },
+        "localGroups": {
+          "type": "INTEGER",
+          "indexed": false,
+          "description": ""
+        },
+        "resource": {
+          "type": "STRING",
+          "indexed": true,
+          "description": ""
+        },
+        "globalGroups": {
+          "type": "INTEGER",
+          "indexed": false,
+          "description": ""
+        },
+        "type": {
+          "type": "STRING",
+          "indexed": true,
+          "description": ""
+        },
+        "subrevision": {
+          "type": "INTEGER",
+          "indexed": false,
+          "description": ""
+        }
+      },
+      "relationships": {
+        "rel_folder_stats": {
+          "target": "migGUID",
+          "description": ""
+        }
+      }
+    },
+    {
+      "label": "Task",
+      "description": "",
+      "attributes": {
+        "projectdescription": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "projecttimestamp": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "dynamicPlaceholders": {
+          "type": "LIST",
+          "indexed": false,
+          "description": ""
+        },
+        "migRavenID": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "isDeepClean": {
+          "type": "BOOLEAN",
+          "indexed": false,
+          "description": ""
+        },
+        "olderthanselectedfilechangedate": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "isusingtemplate": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "type": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "folderrequestsettingspathunique": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "laststarted": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "islogdeactivated": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "description": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "logfilename": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "archiveconsoleuri": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "optional": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "templatefolderpath": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "isCreatingSymlinksInExtraWorkflow": {
+          "type": "BOOLEAN",
+          "indexed": false,
+          "description": ""
+        },
+        "taskguid": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "archivepath": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "groupElementSeparator": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "isSendingSeparatedMails": {
+          "type": "BOOLEAN",
+          "indexed": false,
+          "description": ""
+        },
+        "workflowguid": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "excludedpaths": {
+          "type": "LIST",
+          "indexed": false,
+          "description": ""
+        },
+        "linkpath": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "lastfinished": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "directoryid": {
+          "type": "INTEGER",
+          "indexed": false,
+          "description": ""
+        },
+        "logpath": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "issendingdata": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "language": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "comment": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "phase": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "templateidentifier": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "processId": {
+          "type": "INTEGER",
+          "indexed": false,
+          "description": ""
+        },
+        "subject": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "remotescanserviceguid": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "state": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "isdeletingemptysourcedirectory": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "disabledworkflowguids": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "outpath": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "excludedmimetypes": {
+          "type": "LIST",
+          "indexed": false,
+          "description": ""
+        },
+        "domaincontroller": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "domain": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "consoleuri": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "archiveconsoleprocessid": {
+          "type": "INTEGER",
+          "indexed": false,
+          "description": ""
+        },
+        "deletionDate": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "olderthanutc": {
+          "type": "INTEGER",
+          "indexed": false,
+          "description": ""
+        },
+        "personalizedPlaceholderVariables": {
+          "type": "LIST",
+          "indexed": false,
+          "description": ""
+        },
+        "newerthanutc": {
+          "type": "INTEGER",
+          "indexed": false,
+          "description": ""
+        },
+        "directoryIdent": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "message": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "placeholdervariables": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "excludedfolders": {
+          "type": "LIST",
+          "indexed": false,
+          "description": ""
+        },
+        "sourcepath": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "mailbody": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        }
+      },
+      "relationships": {
+        "rel_dynPlaceholder_note": {
+          "target": "Note",
+          "description": ""
+        },
+        "rel_dynPlaceholder_recipient": {
+          "target": "ADAccount",
+          "description": ""
+        },
+        "rel_adBaseoperation": {
+          "target": "AdOperation",
+          "description": ""
+        },
+        "rel_task": {
+          "target": "TaskGraph",
+          "description": ""
+        },
+        "rel_whitelist": {
+          "target": "ResourceArchive",
+          "description": ""
+        },
+        "rel_deadlinetask": {
+          "target": "FolderRequestSettings",
+          "description": ""
+        },
+        "rel_additionalMailAccount": {
+          "target": "ADAccount",
+          "description": ""
+        }
+      }
+    },
+    {
+      "label": "TaskLogEntry",
+      "description": "",
+      "attributes": {
+        "fileManagementLogFilename": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "tasktype": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "deadlineDate": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "folderRequestSettingsCreatedDate": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "activeDirectoryManagementLogFilename": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "isLogDeactivated": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "isActiveDirectoryManagementLogDeactivated": {
+          "type": "BOOLEAN",
+          "indexed": false,
+          "description": ""
+        },
+        "disabledworkflowguids": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "ouPath": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "activeDirectoryManagementLogPath": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "description": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "domain": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "domainController": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "taskguid": {
+          "type": "STRING",
+          "indexed": true,
+          "description": ""
+        },
+        "isFileManagementLogDeactivated": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "fileManagementLogPath": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "logPath": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "folderRequestSettingsPath": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "deletionDate": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "taskgroupguid": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "finished": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "directoryIdent": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "logFilename": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "message": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "project": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "taskstate": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "resourceScanGuid": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "started": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "phase": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        }
+      },
+      "relationships": {
+        "logentry": {
+          "target": "WorkflowLog",
+          "description": ""
+        }
+      }
+    },
+    {
+      "label": "ResourceSearch",
+      "description": "",
+      "attributes": {
+        "filecount": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "status": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "migRavenID": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "lastwritetime": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "parentid": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "timeCategory": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "inheritance": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "subrevision": {
+          "type": "INTEGER",
+          "indexed": true,
+          "description": ""
+        },
+        "directoryIdent": {
+          "type": "STRING",
+          "indexed": true,
+          "description": ""
+        },
+        "up": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "broken": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "creationtime": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "timestamp": {
+          "type": "STRING",
+          "indexed": true,
+          "description": ""
+        },
+        "revision": {
+          "type": "INTEGER",
+          "indexed": true,
+          "description": ""
+        },
+        "lastaccesstime": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "maxfilelength": {
+          "type": "INTEGER",
+          "indexed": false,
+          "description": ""
+        },
+        "sourcepath": {
+          "type": "STRING",
+          "indexed": true,
+          "description": ""
+        },
+        "name": {
+          "type": "STRING",
+          "indexed": true,
+          "description": ""
+        },
+        "targetpath": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "down": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "foldersize": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "pathnormalized": {
+          "type": "STRING",
+          "indexed": true,
+          "description": ""
+        },
+        "volumeSerial": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        }
+      },
+      "relationships": {
+        "rel_archiveSymLink": {
+          "target": "p637778510225842326",
+          "description": ""
+        },
+        "rel_archiveEquivalent": {
+          "target": "migGUID",
+          "description": ""
+        },
+        "rel_tempStat": {
+          "target": "ResourceSearch",
+          "description": ""
+        },
+        "rel_child0": {
+          "target": "ResourceSearch",
+          "description": ""
+        },
+        "rel_folderRequestSettings": {
+          "target": "FolderRequestSettings",
+          "description": ""
+        }
+      }
+    },
+    {
+      "label": "p637778510225842326",
+      "description": "",
+      "attributes": {
+        "filecount": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "status": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "migRavenID": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "lastwritetime": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "parentid": {
+          "type": "STRING",
+          "indexed": true,
+          "description": ""
+        },
+        "timeCategory": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "inheritance": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "subrevision": {
+          "type": "INTEGER",
+          "indexed": false,
+          "description": ""
+        },
+        "directoryIdent": {
+          "type": "STRING",
+          "indexed": true,
+          "description": ""
+        },
+        "up": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "timestamp": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "broken": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "creationtime": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "isLeadingToArchive": {
+          "type": "BOOLEAN",
+          "indexed": false,
+          "description": ""
+        },
+        "revision": {
+          "type": "INTEGER",
+          "indexed": false,
+          "description": ""
+        },
+        "lastaccesstime": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "maxfilelength": {
+          "type": "INTEGER",
+          "indexed": false,
+          "description": ""
+        },
+        "sourcepath": {
+          "type": "STRING",
+          "indexed": true,
+          "description": ""
+        },
+        "name": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "targetpath": {
+          "type": "STRING",
+          "indexed": true,
+          "description": ""
+        },
+        "down": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "foldersize": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "pathnormalized": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "volumeSerial": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        }
+      },
+      "relationships": {
+        "rel_archiveSymLink": {
+          "target": "p637778510225842326",
+          "description": ""
+        },
+        "rel_archiveEquivalent": {
+          "target": "migGUID",
+          "description": ""
+        },
+        "rel_child0": {
+          "target": "ResourceSearch",
+          "description": ""
+        },
+        "rel_folderRequestSettings": {
+          "target": "FolderRequestSettings",
+          "description": ""
+        }
+      }
+    },
+    {
+      "label": "FileOperation",
+      "description": "",
+      "attributes": {
+        "isdeletecontentsonly": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "isforcedelete": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "createtype": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "isSuccess": {
+          "type": "BOOLEAN",
+          "indexed": false,
+          "description": ""
+        },
+        "symlinkTargetPath": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "type": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "isPurgeAddIgnoringListPermissions": {
+          "type": "BOOLEAN",
+          "indexed": false,
+          "description": ""
+        },
+        "permissionOperationMode": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        }
+      },
+      "relationships": {
+        "rel_baseoperation": {
+          "target": "Task",
+          "description": ""
+        },
+        "rel_operationTarget": {
+          "target": "ResourceArchive",
+          "description": ""
+        }
+      }
+    },
+    {
+      "label": "WorkflowLog",
+      "description": "",
+      "attributes": {
+        "workflowtype": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "serviceservername": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "workflowguid": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "resource": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "state": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "createddate": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "workflowname": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "guid": {
+          "type": "STRING",
+          "indexed": true,
+          "description": ""
+        },
+        "finish": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "disableReasons": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "nextexecution": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "start": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "workflowownerguid": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "path": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "filename": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "workflowdescription": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        }
+      },
+      "relationships": {}
+    },
+    {
+      "label": "Workflow",
+      "description": "",
+      "attributes": {
+        "workflowtype": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "isInTransaction": {
+          "type": "BOOLEAN",
+          "indexed": false,
+          "description": ""
+        },
+        "status": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "state": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "currentworkflowlogguid": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "createddate": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "disableReason": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "ownerguid": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "guid": {
+          "type": "STRING",
+          "indexed": true,
+          "description": ""
+        },
+        "disableReasons": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "description": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "priority": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "name": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        }
+      },
+      "relationships": {
+        "rel_workflowlog": {
+          "target": "WorkflowLog",
+          "description": ""
+        },
+        "rel_workflow": {
+          "target": "migGUID",
+          "description": ""
+        }
+      }
+    },
+    {
+      "label": "TaskGraph",
+      "description": "",
+      "attributes": {
+        "guid": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "starttaskgroup": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "currenttaskgroup": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        }
+      },
+      "relationships": {
+        "rel_taskgraph": {
+          "target": "Workflow",
+          "description": ""
+        }
+      }
+    },
+    {
+      "label": "Services",
+      "description": "",
+      "attributes": {
+        "port": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "mimetypespath": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "reportexportpath": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "isdefaultservice": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "currentSavingResource": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "installid": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "migRavenID": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "databaseserviceurl": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "type": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "transactionstatus": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "version": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "id": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "categorypermissionrolespath": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "description": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "admonitorimportpath": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "name": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "isremote": {
+          "type": "BOOLEAN",
+          "indexed": false,
+          "description": ""
+        },
+        "createdatetime": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "adscanimportpath": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "resourcescanserverurl": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "adscanserviceurl": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "resourcescanimportpath": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "excludedpaths": {
+          "type": "LIST",
+          "indexed": false,
+          "description": ""
+        },
+        "servicestatus": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "usesystemlocalaccount": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "categorymimetypespath": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "exportpath": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "coreserviceurl": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "machine": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "excludedfolders": {
+          "type": "LIST",
+          "indexed": false,
+          "description": ""
+        },
+        "neo4jdatabasemachine": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "excludedfiles": {
+          "type": "LIST",
+          "indexed": false,
+          "description": ""
+        },
+        "usercardconfigpath": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "user": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        }
+      },
+      "relationships": {
+        "rel_resourceScanTarget": {
+          "target": "ResourceSearch",
+          "description": ""
+        }
+      }
+    },
+    {
+      "label": "Roles",
+      "description": "",
+      "attributes": {
+        "role": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        }
+      },
+      "relationships": {
+        "rel_permission": {
+          "target": "CategoriesActions",
+          "description": ""
+        }
+      }
+    },
+    {
+      "label": "CategoriesActions",
+      "description": "",
+      "attributes": {
+        "id": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "description": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "name": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "action": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        }
+      },
+      "relationships": {}
+    },
+    {
+      "label": "ResourceArchive",
+      "description": "",
+      "attributes": {
+        "filecount": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "DeletionLock": {
+          "type": "BOOLEAN",
+          "indexed": false,
+          "description": ""
+        },
+        "migRavenID": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "lastwritetime": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "parentid": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "timestamp": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "revision": {
+          "type": "INTEGER",
+          "indexed": false,
+          "description": ""
+        },
+        "RetentionPeriod_MS_Value": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "lastaccesstime": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "maxfilelength": {
+          "type": "INTEGER",
+          "indexed": false,
+          "description": ""
+        },
+        "name": {
+          "type": "STRING",
+          "indexed": true,
+          "description": ""
+        },
+        "targetpath": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "pathnormalized": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "status": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "Partner-Liste_88dcc4e57db78213": {
+          "type": "LIST",
+          "indexed": false,
+          "description": ""
+        },
+        "timeCategory": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "inheritance": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "subrevision": {
+          "type": "INTEGER",
+          "indexed": false,
+          "description": ""
+        },
+        "directoryIdent": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "up": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "broken": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "RetentionPeriod_MS": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "creationtime": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "sourcepath": {
+          "type": "STRING",
+          "indexed": true,
+          "description": ""
+        },
+        "down": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "foldersize": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "volumeSerial": {
+          "type": "STRING",
+          "indexed": true,
+          "description": ""
+        }
+      },
+      "relationships": {
+        "rel_archiveSymLink": {
+          "target": "p637778510225842326",
+          "description": ""
+        },
+        "rel_archiveEquivalent": {
+          "target": "migGUID",
+          "description": ""
+        },
+        "rel_tempStat": {
+          "target": "ResourceArchive",
+          "description": ""
+        },
+        "rel_folderRequestSettings": {
+          "target": "FolderRequestSettings",
+          "description": ""
+        }
+      }
+    },
+    {
+      "label": "FolderRequestNote",
+      "description": "",
+      "attributes": {
+        "text": {
+          "type": "STRING",
+          "indexed": true,
+          "description": ""
+        },
+        "dateTime": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        }
+      },
+      "relationships": {
+        "rel_author": {
+          "target": "ADAccount",
+          "description": ""
+        }
+      }
+    },
+    {
+      "label": "UserCardInformation",
+      "description": "",
+      "attributes": {
+        "showOnSearch": {
+          "type": "BOOLEAN",
+          "indexed": false,
+          "description": ""
+        },
+        "id": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "labelEnglish": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "internalName": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "showOnDialog": {
+          "type": "BOOLEAN",
+          "indexed": false,
+          "description": ""
+        },
+        "showOnPopover": {
+          "type": "BOOLEAN",
+          "indexed": false,
+          "description": ""
+        },
+        "labelGerman": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        }
+      },
+      "relationships": {}
+    },
+    {
+      "label": "LogBookEntry",
+      "description": "",
+      "attributes": {
+        "disableReason": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "guid": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "timeStamp": {
+          "type": "STRING",
+          "indexed": true,
+          "description": ""
+        },
+        "isRoot": {
+          "type": "BOOLEAN",
+          "indexed": false,
+          "description": ""
+        },
+        "olderThanInDays": {
+          "type": "INTEGER",
+          "indexed": false,
+          "description": ""
+        },
+        "comment": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        }
+      },
+      "relationships": {
+        "rel_logBook_source": {
+          "target": "Workflow",
+          "description": ""
+        },
+        "rel_logBook_adAccountAdded": {
+          "target": "ADAccount",
+          "description": ""
+        },
+        "rel_logBook_parentEntry": {
+          "target": "LogBookEntry",
+          "description": ""
+        },
+        "rel_logBook_adGroup": {
+          "target": "ADAccount",
+          "description": ""
+        },
+        "rel_addedExclude": {
+          "target": "migGUID",
+          "description": ""
+        },
+        "rel_logBook_workflow": {
+          "target": "Workflow",
+          "description": ""
+        },
+        "rel_logBook_dataOwnerRemoved": {
+          "target": "ADAccount",
+          "description": ""
+        },
+        "rel_logBook_author": {
+          "target": "ADAccount",
+          "description": ""
+        },
+        "rel_removedExclude": {
+          "target": "ResourceSearch",
+          "description": ""
+        },
+        "rel_logBook_dataOwnerAdded": {
+          "target": "ADAccount",
+          "description": ""
+        },
+        "rel_logBook_permissionAdded": {
+          "target": "ADAccount",
+          "description": ""
+        },
+        "rel_logBook_transaction": {
+          "target": "BusinessTransaction",
+          "description": ""
+        },
+        "rel_logBook_permissionRemoved": {
+          "target": "ADAccount",
+          "description": ""
+        },
+        "rel_logBook_adAccountRemoved": {
+          "target": "ADAccount",
+          "description": ""
+        },
+        "rel_logBook_resource": {
+          "target": "ResourceArchive",
+          "description": ""
+        }
+      }
+    },
+    {
+      "label": "TaskSummary",
+      "description": "",
+      "attributes": {
+        "activeUsers": {
+          "type": "INTEGER",
+          "indexed": false,
+          "description": ""
+        },
+        "status": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "currentworkflowlogguid": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "finished": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "type": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "logfullpath": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "computers": {
+          "type": "INTEGER",
+          "indexed": false,
+          "description": ""
+        },
+        "filesArchived": {
+          "type": "INTEGER",
+          "indexed": false,
+          "description": ""
+        },
+        "filesize": {
+          "type": "INTEGER",
+          "indexed": false,
+          "description": ""
+        },
+        "allUsers": {
+          "type": "INTEGER",
+          "indexed": false,
+          "description": ""
+        },
+        "filesFailed": {
+          "type": "INTEGER",
+          "indexed": false,
+          "description": ""
+        },
+        "started": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "taskguid": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "groups": {
+          "type": "INTEGER",
+          "indexed": false,
+          "description": ""
+        },
+        "summaryJson": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        }
+      },
+      "relationships": {
+        "rel_log_summary": {
+          "target": "TaskLogEntry",
+          "description": ""
+        }
+      }
+    },
+    {
+      "label": "FileTypes",
+      "description": "",
+      "attributes": {
+        "type": {
+          "type": "STRING",
+          "indexed": true,
+          "unique": true,
+          "description": ""
+        },
+        "isBusinessOverride": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        }
+      },
+      "relationships": {
+        "rel_files": {
+          "target": "ResourceSearch",
+          "description": ""
+        }
+      }
+    },
+    {
+      "label": "FolderRequestSettings",
+      "description": "",
+      "attributes": {
+        "instructionforuse": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "projecttimestamp": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "permissionmode": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "projectDescription": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "numberOfExtensionsCurrent": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "isExtendableDeadline": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "extensionPeriodInDays": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "createdDate": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "numberOfExtensionsMaximum": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "deadline": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "templateName": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        }
+      },
+      "relationships": {
+        "rel_folderRequestNote": {
+          "target": "FolderRequestNote",
+          "description": ""
+        }
+      }
+    },
+    {
+      "label": "AdOperation",
+      "description": "",
+      "attributes": {
+        "identityType": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "membersIdentityType": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "permission": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "type": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "directoryIdent": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "mode": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "resourcepath": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "issuccess": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "groupScope": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "accounttype": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "identityValue": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "isMigRavenGeneratedGroup": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "members": {
+          "type": "LIST",
+          "indexed": false,
+          "description": ""
+        }
+      },
+      "relationships": {}
+    },
+    {
+      "label": "ADAccount",
+      "description": "",
+      "attributes": {
+        "manager": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "tokenCount": {
+          "type": "INTEGER",
+          "indexed": false,
+          "description": ""
+        },
+        "dNSHostName": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "telephonenumber": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "type": {
+          "type": "STRING",
+          "indexed": true,
+          "description": ""
+        },
+        "whenchanged": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "roomnumber": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "info": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "city": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "revision": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "logonCount": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "sAMAccountName": {
+          "type": "STRING",
+          "indexed": true,
+          "description": ""
+        },
+        "description": {
+          "type": "STRING",
+          "indexed": true,
+          "description": ""
+        },
+        "primaryGroupID": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "operatingSystemHotfix": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "departmentnumber": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "isMigRavenGeneratedGroup": {
+          "type": "BOOLEAN",
+          "indexed": false,
+          "description": ""
+        },
+        "employeeType": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "employeeID": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "sn": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "objectSID": {
+          "type": "STRING",
+          "indexed": true,
+          "description": ""
+        },
+        "commonsid": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "operatingSystemVersion": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "grouptype": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "distinguishedname": {
+          "type": "STRING",
+          "indexed": true,
+          "description": ""
+        },
+        "accountExpires": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "email": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "cn": {
+          "type": "STRING",
+          "indexed": true,
+          "description": ""
+        },
+        "company": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "adspath": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "lastLogon": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "userprincipalname": {
+          "type": "STRING",
+          "indexed": true,
+          "description": ""
+        },
+        "objectGUID": {
+          "type": "STRING",
+          "indexed": true,
+          "description": ""
+        },
+        "mobile": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "operatingSystem": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "rev": {
+          "type": "INTEGER",
+          "indexed": true,
+          "description": ""
+        },
+        "department": {
+          "type": "STRING",
+          "indexed": true,
+          "description": ""
+        },
+        "givenName": {
+          "type": "STRING",
+          "indexed": true,
+          "description": ""
+        },
+        "sAMAccountType": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "tokenfactor": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "isWellKnown": {
+          "type": "BOOLEAN",
+          "indexed": false,
+          "description": ""
+        },
+        "title": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "division": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "isactive": {
+          "type": "STRING",
+          "indexed": true,
+          "description": ""
+        },
+        "whencreated": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "lastLogonTimeStamp": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "name": {
+          "type": "STRING",
+          "indexed": true,
+          "description": ""
+        },
+        "domain": {
+          "type": "STRING",
+          "indexed": true,
+          "description": ""
+        },
+        "proxyAddresses": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "operatingSystemServicePack": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "useraccountcontrol": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "sIDHistory4": {
+          "type": "STRING",
+          "indexed": true,
+          "description": ""
+        },
+        "userclaims": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "sIDHistory5": {
+          "type": "STRING",
+          "indexed": true,
+          "description": ""
+        },
+        "sIDHistory2": {
+          "type": "STRING",
+          "indexed": true,
+          "description": ""
+        },
+        "sIDHistory3": {
+          "type": "STRING",
+          "indexed": true,
+          "description": ""
+        },
+        "sIDHistory1": {
+          "type": "STRING",
+          "indexed": true,
+          "description": ""
+        },
+        "ExtensionName": {
+          "type": "STRING",
+          "indexed": true,
+          "description": ""
+        },
+        "servicePrincipalName": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "physicalDeliveryOfficeName": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "ad": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "notes": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "employeeNumber": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "displayname": {
+          "type": "STRING",
+          "indexed": true,
+          "description": ""
+        }
+      },
+      "relationships": {
+        "is_KPI_owner": {
+          "target": "KPI",
+          "description": ""
+        },
+        "rel_role": {
+          "target": "Roles",
+          "description": ""
+        },
+        "rel_fileowner": {
+          "target": "ResourceSearch",
+          "description": ""
+        },
+        "rel_personComputerMember": {
+          "target": "ADAccount",
+          "description": ""
+        },
+        "rel_memberhistory": {
+          "target": "ADAccount",
+          "description": ""
+        },
+        "rel_adextention": {
+          "target": null,
+          "description": ""
+        },
+        "in_department": {
+          "target": "Department",
+          "description": ""
+        },
+        "rel_accessStatistic": {
+          "target": "ResourceSearch",
+          "description": ""
+        },
+        "rel_score_account_in_department": {
+          "target": "Departments",
+          "description": ""
+        },
+        "rel_do_dataOwner": {
+          "target": "migGUID",
+          "description": ""
+        },
+        "rel_member": {
+          "target": "ADAccount",
+          "description": ""
+        },
+        "rel_groupMember": {
+          "target": "ADAccount",
+          "description": ""
+        }
+      }
+    },
+    {
+      "label": "migGUID",
+      "description": "",
+      "attributes": {
+        "migRavenID": {
+          "type": "STRING",
+          "indexed": true,
+          "unique": true,
+          "description": ""
+        }
+      },
+      "relationships": {
+        "rel_migraven": {
+          "target": "ResourceSearch",
+          "description": ""
+        },
+        "rel_note": {
+          "target": "Note",
+          "description": ""
+        }
+      }
+    },
+    {
+      "label": "ACE",
+      "description": "",
+      "attributes": {
+        "stamp": {
+          "type": "STRING",
+          "indexed": true,
+          "unique": true,
+          "description": ""
+        },
+        "sid": {
+          "type": "STRING",
+          "indexed": true,
+          "description": ""
+        },
+        "status": {
+          "type": "STRING",
+          "indexed": true,
+          "description": ""
+        },
+        "name": {
+          "type": "STRING",
+          "indexed": true,
+          "description": ""
+        },
+        "ace_mapped": {
+          "type": "STRING",
+          "indexed": true,
+          "description": ""
+        },
+        "ace": {
+          "type": "STRING",
+          "indexed": true,
+          "description": ""
+        },
+        "type": {
+          "type": "STRING",
+          "indexed": true,
+          "description": ""
+        },
+        "ace_flags": {
+          "type": "STRING",
+          "indexed": true,
+          "description": ""
+        }
+      },
+      "relationships": {
+        "rel_ace": {
+          "target": "ADAccount",
+          "description": ""
+        },
+        "rel_right0": {
+          "target": "ResourceSearch",
+          "description": ""
+        }
+      }
+    },
+    {
+      "label": "AppConfiguration",
+      "description": "",
+      "attributes": {
+        "ExtendedADSaveLogging": {
+          "type": "BOOLEAN",
+          "indexed": false,
+          "description": ""
+        },
+        "Archive": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "ExtendedResourceSaveLogging": {
+          "type": "BOOLEAN",
+          "indexed": false,
+          "description": ""
+        },
+        "Blacklist_Changeable": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "ACE": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "GlobalConfigValues": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "maxDepthForFolderRequest": {
+          "type": "INTEGER",
+          "indexed": false,
+          "description": ""
+        },
+        "HttpsPort": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "ShowInfo": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "isMigRavenInMaintenanceMode": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "UseHttps": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        }
+      },
+      "relationships": {}
+    },
+    {
+      "label": "ScanError",
+      "description": "",
+      "attributes": {
+        "error": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "sourcepath": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        }
+      },
+      "relationships": {
+        "rel_error": {
+          "target": "Project",
+          "description": ""
+        }
+      }
+    },
+    {
+      "label": "ADStatistics",
+      "description": "",
+      "attributes": {
+        "isdirty": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "domainnetbiosname": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "computers": {
+          "type": "INTEGER",
+          "indexed": false,
+          "description": ""
+        },
+        "scanserviceurl": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "allusers": {
+          "type": "INTEGER",
+          "indexed": false,
+          "description": ""
+        },
+        "lastimportdate": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "scanid": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "name": {
+          "type": "STRING",
+          "indexed": true,
+          "description": ""
+        },
+        "activeusers": {
+          "type": "INTEGER",
+          "indexed": false,
+          "description": ""
+        },
+        "scanstatus": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "scandate": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "groups": {
+          "type": "INTEGER",
+          "indexed": false,
+          "description": ""
+        }
+      },
+      "relationships": {}
+    },
+    {
+      "label": "Blacklist",
+      "description": "",
+      "attributes": {
+        "description": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "isBlacklist": {
+          "type": "BOOLEAN",
+          "indexed": false,
+          "description": ""
+        },
+        "objectGUID": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "type": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        }
+      },
+      "relationships": {
+        "rel_blacklistMember": {
+          "target": "ADAccount",
+          "description": ""
+        },
+        "rel_filterToken": {
+          "target": "FilterToken",
+          "description": ""
+        }
+      }
+    },
+    {
+      "label": "Notification",
+      "description": "",
+      "attributes": {
+        "guid": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "content": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "category": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "title": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "isMarkedAsDeleted": {
+          "type": "BOOLEAN",
+          "indexed": false,
+          "description": ""
+        },
+        "timeofsending": {
+          "type": "DATE_TIME",
+          "indexed": false,
+          "description": ""
+        },
+        "actionlink": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "subcategory": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "timeofreading": {
+          "type": "DATE_TIME",
+          "indexed": false,
+          "description": ""
+        },
+        "isRead": {
+          "type": "BOOLEAN",
+          "indexed": false,
+          "description": ""
+        }
+      },
+      "relationships": {
+        "rel_notification": {
+          "target": "ADAccount",
+          "description": ""
+        }
+      }
+    },
+    {
+      "label": "ADAccountArchive",
+      "description": "",
+      "attributes": {
+        "manager": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "telephonenumber": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "type": {
+          "type": "STRING",
+          "indexed": true,
+          "description": ""
+        },
+        "whenchanged": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "roomnumber": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "info": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "city": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "revision": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "sAMAccountName": {
+          "type": "STRING",
+          "indexed": true,
+          "description": ""
+        },
+        "description": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "primaryGroupID": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "departmentnumber": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "isMigRavenGeneratedGroup": {
+          "type": "BOOLEAN",
+          "indexed": false,
+          "description": ""
+        },
+        "employeeType": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "employeeID": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "sn": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "objectSID": {
+          "type": "STRING",
+          "indexed": true,
+          "description": ""
+        },
+        "commonsid": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "grouptype": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "distinguishedname": {
+          "type": "STRING",
+          "indexed": true,
+          "description": ""
+        },
+        "accountExpires": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "email": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "cn": {
+          "type": "STRING",
+          "indexed": true,
+          "description": ""
+        },
+        "company": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "adspath": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "lastLogon": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "userprincipalname": {
+          "type": "STRING",
+          "indexed": true,
+          "description": ""
+        },
+        "objectGUID": {
+          "type": "STRING",
+          "indexed": true,
+          "description": ""
+        },
+        "mobile": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "ophaned": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "rev": {
+          "type": "INTEGER",
+          "indexed": true,
+          "description": ""
+        },
+        "department": {
+          "type": "STRING",
+          "indexed": true,
+          "description": ""
+        },
+        "givenName": {
+          "type": "STRING",
+          "indexed": true,
+          "description": ""
+        },
+        "sAMAccountType": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "tokenfactor": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "isWellKnown": {
+          "type": "BOOLEAN",
+          "indexed": false,
+          "description": ""
+        },
+        "title": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "division": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "isactive": {
+          "type": "STRING",
+          "indexed": true,
+          "description": ""
+        },
+        "whencreated": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "lastLogonTimeStamp": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "name": {
+          "type": "STRING",
+          "indexed": true,
+          "description": ""
+        },
+        "domain": {
+          "type": "STRING",
+          "indexed": true,
+          "description": ""
+        },
+        "proxyAddresses": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "useraccountcontrol": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "sIDHistory4": {
+          "type": "STRING",
+          "indexed": true,
+          "description": ""
+        },
+        "sIDHistory5": {
+          "type": "STRING",
+          "indexed": true,
+          "description": ""
+        },
+        "sIDHistory2": {
+          "type": "STRING",
+          "indexed": true,
+          "description": ""
+        },
+        "sIDHistory3": {
+          "type": "STRING",
+          "indexed": true,
+          "description": ""
+        },
+        "sIDHistory1": {
+          "type": "STRING",
+          "indexed": true,
+          "description": ""
+        },
+        "orphaned": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "ad": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "physicalDeliveryOfficeName": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "employeeNumber": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "displayname": {
+          "type": "STRING",
+          "indexed": true,
+          "description": ""
+        }
+      },
+      "relationships": {
+        "rel_role": {
+          "target": "Roles",
+          "description": ""
+        },
+        "rel_fileowner": {
+          "target": "ResourceSearch",
+          "description": ""
+        },
+        "rel_personComputerMember": {
+          "target": "ADAccount",
+          "description": ""
+        },
+        "rel_memberhistory": {
+          "target": "ADAccount",
+          "description": ""
+        },
+        "rel_adextention": {
+          "target": null,
+          "description": ""
+        },
+        "in_department": {
+          "target": "Department",
+          "description": ""
+        },
+        "rel_score_account_in_department": {
+          "target": "Departments",
+          "description": ""
+        },
+        "rel_do_dataOwner": {
+          "target": "migGUID",
+          "description": ""
+        },
+        "rel_member": {
+          "target": "ADAccount",
+          "description": ""
+        },
+        "rel_groupMember": {
+          "target": "ADAccountArchive",
+          "description": ""
+        }
+      }
+    },
+    {
+      "label": "FilterToken",
+      "description": "",
+      "attributes": {
+        "groupCount": {
+          "type": "INTEGER",
+          "indexed": false,
+          "description": ""
+        },
+        "filterOption": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "name": {
+          "type": "STRING",
+          "indexed": true,
+          "description": ""
+        },
+        "isBlacklist": {
+          "type": "BOOLEAN",
+          "indexed": false,
+          "description": ""
+        },
+        "tokenPosition": {
+          "type": "LIST",
+          "indexed": false,
+          "description": ""
+        },
+        "separators": {
+          "type": "LIST",
+          "indexed": false,
+          "description": ""
+        },
+        "ouCount": {
+          "type": "INTEGER",
+          "indexed": false,
+          "description": ""
+        },
+        "ous": {
+          "type": "LIST",
+          "indexed": false,
+          "description": ""
+        }
+      },
+      "relationships": {}
+    },
+    {
+      "label": "FRAccount",
+      "description": "",
+      "attributes": {
+        "account": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        }
+      },
+      "relationships": {
+        "rel_fr_account": {
+          "target": null,
+          "description": ""
+        }
+      }
+    },
+    {
+      "label": "FolderRequestTemplateSettings",
+      "description": "",
+      "attributes": {
+        "projecttimestamp": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "permissionmode": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "hasrecertification": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "isvisible": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "lastrecertificationinpercentage": {
+          "type": "FLOAT",
+          "indexed": false,
+          "description": ""
+        },
+        "guid": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "description": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "mindeadlineindays": {
+          "type": "INTEGER",
+          "indexed": false,
+          "description": ""
+        },
+        "name": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "directoryregex": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "path": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "projectDescription": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "recurringcertificationinmonths": {
+          "type": "INTEGER",
+          "indexed": false,
+          "description": ""
+        },
+        "isExtendableDeadline": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "defaultValue": {
+          "type": "INTEGER",
+          "indexed": false,
+          "description": ""
+        },
+        "extensionPeriodInDays": {
+          "type": "INTEGER",
+          "indexed": false,
+          "description": ""
+        },
+        "maxdeadlineindays": {
+          "type": "INTEGER",
+          "indexed": false,
+          "description": ""
+        },
+        "numberOfExtensionsMaximum": {
+          "type": "INTEGER",
+          "indexed": false,
+          "description": ""
+        },
+        "deadline": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        }
+      },
+      "relationships": {}
+    },
+    {
+      "label": "EMailServer",
+      "description": "",
+      "attributes": {
+        "mailLimitBatchSize": {
+          "type": "INTEGER",
+          "indexed": false,
+          "description": ""
+        },
+        "port": {
+          "type": "INTEGER",
+          "indexed": false,
+          "description": ""
+        },
+        "username": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "host": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "mailLimitTimeInMins": {
+          "type": "INTEGER",
+          "indexed": false,
+          "description": ""
+        },
+        "tls": {
+          "type": "BOOLEAN",
+          "indexed": false,
+          "description": ""
+        },
+        "password": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "maxAttachmentSizeInBytes": {
+          "type": "INTEGER",
+          "indexed": false,
+          "description": ""
+        },
+        "key": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "mailaddress": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        }
+      },
+      "relationships": {}
+    },
+    {
+      "label": "DataRetentionGeneralSettings",
+      "description": "",
+      "attributes": {
+        "iscreatinglink": {
+          "type": "BOOLEAN",
+          "indexed": false,
+          "description": ""
+        },
+        "notificationemailstate": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "minimumwaitduration": {
+          "type": "INTEGER",
+          "indexed": false,
+          "description": ""
+        },
+        "haserrormailnotification": {
+          "type": "BOOLEAN",
+          "indexed": false,
+          "description": ""
+        },
+        "islogactivated": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "dataretentionfoldername": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "finalnotificationmailaddress": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "dataretentionentrypath": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "isdataretentionenabled": {
+          "type": "BOOLEAN",
+          "indexed": false,
+          "description": ""
+        },
+        "arepermissionexactcopy": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "logpath": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "excludedmimetypes": {
+          "type": "LIST",
+          "indexed": false,
+          "description": ""
+        },
+        "errornotificationmailaddress": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "excludedfolders": {
+          "type": "LIST",
+          "indexed": false,
+          "description": ""
+        },
+        "linkname": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        }
+      },
+      "relationships": {
+        "rel_timeslot": {
+          "target": "Timeslot",
+          "description": ""
+        }
+      }
+    },
+    {
+      "label": "Timeslot",
+      "description": "",
+      "attributes": {
+        "minute": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "hour": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "day": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        }
+      },
+      "relationships": {
+        "rel_timeslot": {
+          "target": null,
+          "description": ""
+        }
+      }
+    },
+    {
+      "label": "BusinessTransaction",
+      "description": "",
+      "attributes": {
+        "type": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        }
+      },
+      "relationships": {}
+    },
+    {
+      "label": "Project",
+      "description": "",
+      "attributes": {
+        "endtime": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "isScanningClassifications_Directories": {
+          "type": "BOOLEAN",
+          "indexed": false,
+          "description": ""
+        },
+        "projecttype": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "agenturl": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "parentid": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "scanstatus": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "targetpathdfs": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "creator": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "statistics": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "changed": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "timestamp": {
+          "type": "STRING",
+          "indexed": true,
+          "description": ""
+        },
+        "revision": {
+          "type": "INTEGER",
+          "indexed": false,
+          "description": ""
+        },
+        "share": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "time": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "username": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "threads": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "description": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "targetpath": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "domain": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "config": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "isScanningClassifications_Files": {
+          "type": "BOOLEAN",
+          "indexed": false,
+          "description": ""
+        },
+        "stamp": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "error": {
+          "type": "INTEGER",
+          "indexed": false,
+          "description": ""
+        },
+        "status": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "subrevision": {
+          "type": "INTEGER",
+          "indexed": false,
+          "description": ""
+        },
+        "depth": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "sourcepath": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "server": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "user": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        }
+      },
+      "relationships": {
+        "rel_child_ini": {
+          "target": "ResourceSearch",
+          "description": ""
+        }
+      }
+    },
+    {
+      "label": "Note",
+      "description": "",
+      "attributes": {
+        "folderident": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "status": {
+          "type": "INTEGER",
+          "indexed": false,
+          "description": ""
+        },
+        "dependsOnApplication": {
+          "type": "BOOLEAN",
+          "indexed": false,
+          "description": ""
+        },
+        "SharePointMigrationPath": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "directoryCanBeArchived": {
+          "type": "BOOLEAN",
+          "indexed": false,
+          "description": ""
+        },
+        "isPurging": {
+          "type": "BOOLEAN",
+          "indexed": false,
+          "description": ""
+        },
+        "creationdate": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "directoryCanBeDeleted": {
+          "type": "BOOLEAN",
+          "indexed": false,
+          "description": ""
+        },
+        "dependentApplication": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "id": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "isMigrationSourceDeleted": {
+          "type": "BOOLEAN",
+          "indexed": false,
+          "description": ""
+        },
+        "flag": {
+          "type": "INTEGER",
+          "indexed": false,
+          "description": ""
+        },
+        "startdate": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "creatorsid": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "tododate": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "usersid": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "SharePointMigrationPathLabel": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "sourcepath": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "directoryShouldBeMigrated": {
+          "type": "BOOLEAN",
+          "indexed": false,
+          "description": ""
+        },
+        "hasDependencies": {
+          "type": "BOOLEAN",
+          "indexed": false,
+          "description": ""
+        },
+        "dependsOnDocuments": {
+          "type": "BOOLEAN",
+          "indexed": false,
+          "description": ""
+        },
+        "migrationTargetPath": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "updatedate": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "note": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        }
+      },
+      "relationships": {}
+    },
+    {
+      "label": "MimeTypeCategory",
+      "description": "",
+      "attributes": {
+        "labelEnglish": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "internalName": {
+          "type": "STRING",
+          "indexed": true,
+          "description": ""
+        },
+        "descriptionGerman": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "descriptionEnglish": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "labelGerman": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "isBusiness": {
+          "type": "BOOLEAN",
+          "indexed": false,
+          "description": ""
+        },
+        "isMigRavenGenerated": {
+          "type": "BOOLEAN",
+          "indexed": false,
+          "description": ""
+        }
+      },
+      "relationships": {
+        "rel_mimeType_category": {
+          "target": "FileTypes",
+          "description": ""
+        }
+      }
+    },
+    {
+      "label": "FileTimes",
+      "description": "",
+      "attributes": {
+        "value": {
+          "type": "STRING",
+          "indexed": true,
+          "unique": true,
+          "description": ""
+        }
+      },
+      "relationships": {
+        "rel_time": {
+          "target": "ResourceSearch",
+          "description": ""
+        }
+      }
+    },
+    {
+      "label": "Department",
+      "description": "",
+      "attributes": {
+        "name": {
+          "type": "STRING",
+          "indexed": true,
+          "description": ""
+        }
+      },
+      "relationships": {
+        "dep_has_perm": {
+          "target": "ResourceArchive",
+          "description": ""
+        },
+        "dep_score": {
+          "target": "ResourceSearch",
+          "description": ""
+        }
+      }
+    },
+    {
+      "label": "N2Neo4j",
+      "description": "",
+      "attributes": {
+        "dbId": {
+          "type": "FLOAT",
+          "indexed": false,
+          "description": ""
+        }
+      },
+      "relationships": {}
+    },
+    {
+      "label": "p133222496104896977",
+      "description": "",
+      "attributes": {
+        "filecount": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "status": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "migRavenID": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "lastwritetime": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "parentid": {
+          "type": "STRING",
+          "indexed": true,
+          "description": ""
+        },
+        "timeCategory": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "inheritance": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "subrevision": {
+          "type": "INTEGER",
+          "indexed": true,
+          "description": ""
+        },
+        "directoryIdent": {
+          "type": "STRING",
+          "indexed": true,
+          "description": ""
+        },
+        "up": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "broken": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "creationtime": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "timestamp": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "revision": {
+          "type": "INTEGER",
+          "indexed": true,
+          "description": ""
+        },
+        "lastaccesstime": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "maxfilelength": {
+          "type": "INTEGER",
+          "indexed": false,
+          "description": ""
+        },
+        "sourcepath": {
+          "type": "STRING",
+          "indexed": true,
+          "description": ""
+        },
+        "name": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "targetpath": {
+          "type": "STRING",
+          "indexed": true,
+          "description": ""
+        },
+        "down": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "foldersize": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "pathnormalized": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "volumeSerial": {
+          "type": "STRING",
+          "indexed": true,
+          "description": ""
+        }
+      },
+      "relationships": {
+        "rel_child0": {
+          "target": "ResourceSearch",
+          "description": ""
+        }
+      }
+    },
+    {
+      "label": "Departments",
+      "description": "",
+      "attributes": {
+        "name": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        }
+      },
+      "relationships": {
+        "rel_score_department_has_perm": {
+          "target": "ResourceSearch",
+          "description": ""
+        },
+        "rel_score_owner_department_v": {
+          "target": "ResourceSearch",
+          "description": ""
+        }
+      }
+    },
+    {
+      "label": "DirectoryTagCategory",
+      "description": "",
+      "attributes": {
+        "isactive": {
+          "type": "BOOLEAN",
+          "indexed": false,
+          "description": ""
+        },
+        "description": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "name": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "ADResourceProperty": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "objectGuid": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        }
+      },
+      "relationships": {
+        "rel_directorytagcategoryeditor": {
+          "target": "ADAccount",
+          "description": ""
+        },
+        "rel_directorytagcategorycreator": {
+          "target": "ADAccount",
+          "description": ""
+        },
+        "rel_directorytagcategoryowner": {
+          "target": "ADAccount",
+          "description": ""
+        }
+      }
+    },
+    {
+      "label": "DirectoryTag",
+      "description": "",
+      "attributes": {
+        "isactive": {
+          "type": "BOOLEAN",
+          "indexed": false,
+          "description": ""
+        },
+        "description": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "name": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "objectGuid": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        }
+      },
+      "relationships": {
+        "rel_tag_assignedto": {
+          "target": "migGUID",
+          "description": ""
+        },
+        "rel_directorytagcreator": {
+          "target": "ADAccount",
+          "description": ""
+        },
+        "rel_directorytageditor": {
+          "target": "ADAccount",
+          "description": ""
+        },
+        "rel_directorytag": {
+          "target": "DirectoryTagCategory",
+          "description": ""
+        },
+        "rel_directorytagcategory": {
+          "target": "DirectoryTagCategory",
+          "description": ""
+        }
+      }
+    },
+    {
+      "label": "CustomMessageModel",
+      "description": "",
+      "attributes": {
+        "locationKey": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        }
+      },
+      "relationships": {
+        "rel_customMessageModelData": {
+          "target": null,
+          "description": ""
+        }
+      }
+    },
+    {
+      "label": "ArchiveSymLink",
+      "description": "",
+      "attributes": {
+        "isLeadingToArchive": {
+          "type": "BOOLEAN",
+          "indexed": false,
+          "description": ""
+        },
+        "sourcepath": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        }
+      },
+      "relationships": {}
+    },
+    {
+      "label": "KPI",
+      "description": "",
+      "attributes": {
+        "enabled": {
+          "type": "BOOLEAN",
+          "indexed": true,
+          "description": ""
+        },
+        "cleanup": {
+          "type": "BOOLEAN",
+          "indexed": false,
+          "description": ""
+        },
+        "alarm": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "bedingung": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "created": {
+          "type": "DATE_TIME",
+          "indexed": false,
+          "description": ""
+        },
+        "query": {
+          "type": "STRING",
+          "indexed": true,
+          "description": ""
+        },
+        "description": {
+          "type": "STRING",
+          "indexed": true,
+          "unique": true,
+          "description": ""
+        },
+        "performance": {
+          "type": "INTEGER",
+          "indexed": false,
+          "description": ""
+        },
+        "target": {
+          "type": "LIST",
+          "indexed": false,
+          "description": ""
+        },
+        "cleanupstatus": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "type": {
+          "type": "STRING",
+          "indexed": true,
+          "description": ""
+        },
+        "warning": {
+          "type": "STRING",
+          "indexed": true,
+          "description": ""
+        }
+      },
+      "relationships": {
+        "rel_kpi": {
+          "target": "Scans",
+          "description": ""
+        }
+      }
+    },
+    {
+      "label": "p638524147000220686",
+      "description": "",
+      "attributes": {
+        "filecount": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "status": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "migRavenID": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "lastwritetime": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "parentid": {
+          "type": "STRING",
+          "indexed": true,
+          "description": ""
+        },
+        "timeCategory": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "inheritance": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "subrevision": {
+          "type": "INTEGER",
+          "indexed": true,
+          "description": ""
+        },
+        "directoryIdent": {
+          "type": "STRING",
+          "indexed": true,
+          "description": ""
+        },
+        "up": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "broken": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "creationtime": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "timestamp": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "revision": {
+          "type": "INTEGER",
+          "indexed": true,
+          "description": ""
+        },
+        "lastaccesstime": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "maxfilelength": {
+          "type": "INTEGER",
+          "indexed": false,
+          "description": ""
+        },
+        "sourcepath": {
+          "type": "STRING",
+          "indexed": true,
+          "description": ""
+        },
+        "name": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "targetpath": {
+          "type": "STRING",
+          "indexed": true,
+          "description": ""
+        },
+        "down": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "foldersize": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "pathnormalized": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "volumeSerial": {
+          "type": "STRING",
+          "indexed": true,
+          "description": ""
+        }
+      },
+      "relationships": {
+        "rel_child0": {
+          "target": "ResourceSearch",
+          "description": ""
+        },
+        "rel_folderRequestSettings": {
+          "target": "FolderRequestSettings",
+          "description": ""
+        }
+      }
+    },
+    {
+      "label": "OES_LDAP",
+      "description": "",
+      "attributes": {
+        "searchbase": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "server": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "pw": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "ldap_account": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        }
+      },
+      "relationships": {}
+    },
+    {
+      "label": "eDir_Structure",
+      "description": "",
+      "attributes": {
+        "dn_doted": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "name": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "dn_lower": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "dn": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "type": {
+          "type": "LIST",
+          "indexed": false,
+          "description": ""
+        }
+      },
+      "relationships": {}
+    },
+    {
+      "label": "test",
+      "description": "",
+      "attributes": {
+        "sAMAccountName": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "bla": {
+          "type": "BOOLEAN",
+          "indexed": false,
+          "description": ""
+        }
+      },
+      "relationships": {}
+    },
+    {
+      "label": "p638653867379365040",
+      "description": "",
+      "attributes": {
+        "filecount": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "status": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "migRavenID": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "lastwritetime": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "parentid": {
+          "type": "STRING",
+          "indexed": true,
+          "description": ""
+        },
+        "timeCategory": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "inheritance": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "subrevision": {
+          "type": "INTEGER",
+          "indexed": true,
+          "description": ""
+        },
+        "directoryIdent": {
+          "type": "STRING",
+          "indexed": true,
+          "description": ""
+        },
+        "up": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "broken": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "creationtime": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "timestamp": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "revision": {
+          "type": "INTEGER",
+          "indexed": true,
+          "description": ""
+        },
+        "lastaccesstime": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "maxfilelength": {
+          "type": "INTEGER",
+          "indexed": false,
+          "description": ""
+        },
+        "sourcepath": {
+          "type": "STRING",
+          "indexed": true,
+          "description": ""
+        },
+        "name": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "targetpath": {
+          "type": "STRING",
+          "indexed": true,
+          "description": ""
+        },
+        "down": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "foldersize": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "pathnormalized": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "volumeSerial": {
+          "type": "STRING",
+          "indexed": true,
+          "description": ""
+        }
+      },
+      "relationships": {
+        "rel_child0": {
+          "target": "ResourceSearch",
+          "description": ""
+        }
+      }
+    },
+    {
+      "label": "p638676182770348688",
+      "description": "",
+      "attributes": {
+        "filecount": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "status": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "lastwritetime": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "parentid": {
+          "type": "STRING",
+          "indexed": true,
+          "description": ""
+        },
+        "timeCategory": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "inheritance": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "subrevision": {
+          "type": "INTEGER",
+          "indexed": true,
+          "description": ""
+        },
+        "directoryIdent": {
+          "type": "STRING",
+          "indexed": true,
+          "description": ""
+        },
+        "up": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "broken": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "creationtime": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "timestamp": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "revision": {
+          "type": "INTEGER",
+          "indexed": true,
+          "description": ""
+        },
+        "lastaccesstime": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "maxfilelength": {
+          "type": "INTEGER",
+          "indexed": false,
+          "description": ""
+        },
+        "sourcepath": {
+          "type": "STRING",
+          "indexed": true,
+          "description": ""
+        },
+        "name": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "targetpath": {
+          "type": "STRING",
+          "indexed": true,
+          "description": ""
+        },
+        "down": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "foldersize": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "pathnormalized": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "volumeSerial": {
+          "type": "STRING",
+          "indexed": true,
+          "description": ""
+        }
+      },
+      "relationships": {
+        "rel_child0": {
+          "target": "ResourceSearch",
+          "description": ""
+        }
+      }
+    },
+    {
+      "label": "p638729794152555669",
+      "description": "",
+      "attributes": {
+        "filecount": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "status": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "migRavenID": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "lastwritetime": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "parentid": {
+          "type": "STRING",
+          "indexed": true,
+          "description": ""
+        },
+        "timeCategory": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "inheritance": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "subrevision": {
+          "type": "INTEGER",
+          "indexed": true,
+          "description": ""
+        },
+        "directoryIdent": {
+          "type": "STRING",
+          "indexed": true,
+          "description": ""
+        },
+        "up": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "broken": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "creationtime": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "timestamp": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "revision": {
+          "type": "INTEGER",
+          "indexed": true,
+          "description": ""
+        },
+        "lastaccesstime": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "maxfilelength": {
+          "type": "INTEGER",
+          "indexed": false,
+          "description": ""
+        },
+        "sourcepath": {
+          "type": "STRING",
+          "indexed": true,
+          "description": ""
+        },
+        "name": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "targetpath": {
+          "type": "STRING",
+          "indexed": true,
+          "description": ""
+        },
+        "down": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "foldersize": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "pathnormalized": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "volumeSerial": {
+          "type": "STRING",
+          "indexed": true,
+          "description": ""
+        }
+      },
+      "relationships": {
+        "rel_child0": {
+          "target": "ResourceSearch",
+          "description": ""
+        }
+      }
+    },
+    {
+      "label": "p638729869911629431",
+      "description": "",
+      "attributes": {
+        "filecount": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "status": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "migRavenID": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "lastwritetime": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "parentid": {
+          "type": "STRING",
+          "indexed": true,
+          "description": ""
+        },
+        "timeCategory": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "inheritance": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "subrevision": {
+          "type": "INTEGER",
+          "indexed": true,
+          "description": ""
+        },
+        "directoryIdent": {
+          "type": "STRING",
+          "indexed": true,
+          "description": ""
+        },
+        "up": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "broken": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "creationtime": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "timestamp": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "revision": {
+          "type": "INTEGER",
+          "indexed": true,
+          "description": ""
+        },
+        "lastaccesstime": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "maxfilelength": {
+          "type": "INTEGER",
+          "indexed": false,
+          "description": ""
+        },
+        "sourcepath": {
+          "type": "STRING",
+          "indexed": true,
+          "description": ""
+        },
+        "name": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "targetpath": {
+          "type": "STRING",
+          "indexed": true,
+          "description": ""
+        },
+        "down": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "foldersize": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "pathnormalized": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "volumeSerial": {
+          "type": "STRING",
+          "indexed": true,
+          "description": ""
+        }
+      },
+      "relationships": {
+        "rel_tempStat": {
+          "target": "ResourceSearch",
+          "description": ""
+        },
+        "rel_child0": {
+          "target": "ResourceSearch",
+          "description": ""
+        }
+      }
+    },
+    {
+      "label": "ADConfiguration",
+      "description": "",
+      "attributes": {
+        "enabled": {
+          "type": "BOOLEAN",
+          "indexed": true,
+          "description": ""
+        },
+        "subrevision": {
+          "type": "INTEGER",
+          "indexed": false,
+          "description": ""
+        },
+        "msDSClaimPossibleValues": {
+          "type": "STRING",
+          "indexed": true,
+          "description": ""
+        },
+        "revision": {
+          "type": "INTEGER",
+          "indexed": false,
+          "description": ""
+        },
+        "distinguishedname": {
+          "type": "STRING",
+          "indexed": true,
+          "description": ""
+        },
+        "cn": {
+          "type": "STRING",
+          "indexed": true,
+          "description": ""
+        },
+        "description": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "name": {
+          "type": "STRING",
+          "indexed": true,
+          "description": ""
+        },
+        "domain": {
+          "type": "STRING",
+          "indexed": true,
+          "description": ""
+        },
+        "msDSClaimAttributeSource": {
+          "type": "STRING",
+          "indexed": true,
+          "description": ""
+        },
+        "datatype": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "saveDateTime": {
+          "type": "DATE_TIME",
+          "indexed": false,
+          "description": ""
+        },
+        "objectclass": {
+          "type": "STRING",
+          "indexed": true,
+          "description": ""
+        },
+        "displayname": {
+          "type": "STRING",
+          "indexed": true,
+          "description": ""
+        }
+      },
+      "relationships": {
+        "rel_resourceProperty_file": {
+          "target": "ResourceSearch",
+          "description": ""
+        },
+        "rel_possibleValueInfo": {
+          "target": "PossibleValueInfo",
+          "description": ""
+        },
+        "rel_resourceProperty_folder": {
+          "target": "ResourceSearch",
+          "description": ""
+        }
+      }
+    },
+    {
+      "label": "ResourceProperty",
+      "description": "",
+      "attributes": {
+        "enabled": {
+          "type": "BOOLEAN",
+          "indexed": false,
+          "description": ""
+        },
+        "subrevision": {
+          "type": "INTEGER",
+          "indexed": false,
+          "description": ""
+        },
+        "msDSClaimPossibleValues": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "revision": {
+          "type": "INTEGER",
+          "indexed": false,
+          "description": ""
+        },
+        "distinguishedname": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "cn": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "description": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "name": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "domain": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "msDSClaimAttributeSource": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "datatype": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "saveDateTime": {
+          "type": "DATE_TIME",
+          "indexed": false,
+          "description": ""
+        },
+        "objectclass": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "displayname": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        }
+      },
+      "relationships": {
+        "rel_resourceProperty_file": {
+          "target": "ResourceSearch",
+          "description": ""
+        },
+        "rel_possibleValueInfo": {
+          "target": "PossibleValueInfo",
+          "description": ""
+        },
+        "rel_resourceProperty_folder": {
+          "target": "ResourceArchive",
+          "description": ""
+        }
+      }
+    },
+    {
+      "label": "p638773768111525903",
+      "description": "",
+      "attributes": {
+        "filecount": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "status": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "migRavenID": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "lastwritetime": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "parentid": {
+          "type": "STRING",
+          "indexed": true,
+          "description": ""
+        },
+        "timeCategory": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "inheritance": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "subrevision": {
+          "type": "INTEGER",
+          "indexed": true,
+          "description": ""
+        },
+        "directoryIdent": {
+          "type": "STRING",
+          "indexed": true,
+          "description": ""
+        },
+        "up": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "broken": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "creationtime": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "timestamp": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "revision": {
+          "type": "INTEGER",
+          "indexed": true,
+          "description": ""
+        },
+        "lastaccesstime": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "maxfilelength": {
+          "type": "INTEGER",
+          "indexed": false,
+          "description": ""
+        },
+        "sourcepath": {
+          "type": "STRING",
+          "indexed": true,
+          "description": ""
+        },
+        "name": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "targetpath": {
+          "type": "STRING",
+          "indexed": true,
+          "description": ""
+        },
+        "down": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "foldersize": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "pathnormalized": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "volumeSerial": {
+          "type": "STRING",
+          "indexed": true,
+          "description": ""
+        }
+      },
+      "relationships": {
+        "rel_child0": {
+          "target": "ResourceSearch",
+          "description": ""
+        }
+      }
+    },
+    {
+      "label": "p638773768833029519",
+      "description": "",
+      "attributes": {
+        "filecount": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "status": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "migRavenID": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "lastwritetime": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "parentid": {
+          "type": "STRING",
+          "indexed": true,
+          "description": ""
+        },
+        "timeCategory": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "inheritance": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "subrevision": {
+          "type": "INTEGER",
+          "indexed": true,
+          "description": ""
+        },
+        "directoryIdent": {
+          "type": "STRING",
+          "indexed": true,
+          "description": ""
+        },
+        "up": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "broken": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "creationtime": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "timestamp": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "revision": {
+          "type": "INTEGER",
+          "indexed": true,
+          "description": ""
+        },
+        "lastaccesstime": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "maxfilelength": {
+          "type": "INTEGER",
+          "indexed": false,
+          "description": ""
+        },
+        "sourcepath": {
+          "type": "STRING",
+          "indexed": true,
+          "description": ""
+        },
+        "name": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "targetpath": {
+          "type": "STRING",
+          "indexed": true,
+          "description": ""
+        },
+        "down": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "foldersize": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "pathnormalized": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "volumeSerial": {
+          "type": "STRING",
+          "indexed": true,
+          "description": ""
+        }
+      },
+      "relationships": {
+        "rel_child0": {
+          "target": "ResourceSearch",
+          "description": ""
+        }
+      }
+    },
+    {
+      "label": "PossibleValueInfo",
+      "description": "",
+      "attributes": {
+        "guid": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "description": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "value": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "displayName": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        }
+      },
+      "relationships": {}
+    },
+    {
+      "label": "SharepointConfiguration",
+      "description": "",
+      "attributes": {
+        "TenantId": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "ClientId": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        }
+      },
+      "relationships": {}
+    },
+    {
+      "label": "p638822129604727054",
+      "description": "",
+      "attributes": {
+        "filecount": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "status": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "migRavenID": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "lastwritetime": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "parentid": {
+          "type": "STRING",
+          "indexed": true,
+          "description": ""
+        },
+        "timeCategory": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "inheritance": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "subrevision": {
+          "type": "INTEGER",
+          "indexed": true,
+          "description": ""
+        },
+        "directoryIdent": {
+          "type": "STRING",
+          "indexed": true,
+          "description": ""
+        },
+        "up": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "timestamp": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "broken": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "creationtime": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "isLeadingToArchive": {
+          "type": "BOOLEAN",
+          "indexed": false,
+          "description": ""
+        },
+        "revision": {
+          "type": "INTEGER",
+          "indexed": true,
+          "description": ""
+        },
+        "lastaccesstime": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "maxfilelength": {
+          "type": "INTEGER",
+          "indexed": false,
+          "description": ""
+        },
+        "sourcepath": {
+          "type": "STRING",
+          "indexed": true,
+          "description": ""
+        },
+        "name": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "targetpath": {
+          "type": "STRING",
+          "indexed": true,
+          "description": ""
+        },
+        "down": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "foldersize": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "pathnormalized": {
+          "type": "STRING",
+          "indexed": false,
+          "description": ""
+        },
+        "volumeSerial": {
+          "type": "STRING",
+          "indexed": true,
+          "description": ""
+        }
+      },
+      "relationships": {
+        "rel_archiveSymLink": {
+          "target": "ArchiveSymLink",
+          "description": ""
+        },
+        "rel_archiveEquivalent": {
+          "target": "migGUID",
+          "description": ""
+        },
+        "rel_child0": {
+          "target": "ResourceSearch",
+          "description": ""
+        }
+      }
+    }
+  ]
+}

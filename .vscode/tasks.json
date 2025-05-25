@@ -1,0 +1,14 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"label": "Start Schema Editor",
+			"type": "shell",
+			"command": "start",
+			"args": [
+				"schema_editor_interface.html"
+			],
+			"group": "build"
+		}
+	]
+}
