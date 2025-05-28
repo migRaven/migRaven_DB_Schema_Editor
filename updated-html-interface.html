@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>migRaven Schema Editor - Enhanced Version</title>
+    <!-- Neo4j Driver for Browser (WebSocket support) -->
+    <script src="https://unpkg.com/neo4j-driver@5.26.0/lib/browser/neo4j-web.min.js"></script>
+    <!-- Load modules first -->
+    <script src="schema_editor_modules.js"></script>
+    <!-- Then main script -->
+    <script src="schema_editor_main.js" defer></script>
+    <link rel="stylesheet" href="schema_editor_styles.css" />
+  </head>
+  <body>
+    <div class="container">
+      <div class="header">
+        <h1>🔧 migRaven Schema Editor</h1>
+        <p>Edit schema descriptions, attributes, and relationships - Enhanced Version</p>
+      </div>
+
+      <div class="neo4j-config" id="neo4jConfigSection">
+        <h3 id="toggleConfigBtn" style="cursor: pointer">
+          🔗 Neo4j Connection <span id="configToggleIndicator">(-)</span>
+        </h3>
+        <div id="neo4jConfigDetails">
+          <div
+            style="
+              background: #e7f3ff;
+              padding: 10px;
+              border-radius: 4px;
+              margin-bottom: 15px;
+              font-size: 14px;
+            "
+          >
+            <strong>ℹ️ Info:</strong> Connect to your Neo4j instance. Ensure
+            Neo4j is running and accessible.
+          </div>
+          <div class="config-row">
+            <input
+              type="text"
+              class="config-input"
+              id="neo4jUrl"
+              placeholder="Neo4j URL (e.g., bolt://srv-mig01:7687)"
+              value="bolt://srv-mig-01:7687"
+            />
+            <input
+              type="text"
+              class="config-input"
+              id="neo4jUser"
+              placeholder="Username"
+              value="migRavenDBAdministrator"
+            />
+            <input
+              type="password"
+              class="config-input"
+              id="neo4jPassword"
+              placeholder="Password"
+            />
+          </div>
+          <div class="config-row" style="margin-top: 10px">
+            <input
+              type="text"
+              class="config-input"
+              id="neo4jDatabase"
+              placeholder="Database (optional)"
+            />
+            <button class="btn btn-info" id="testConnectionBtn">
+              Test Connection
+            </button>
+          </div>
+        </div>
+        <div
+          id="connectionStatus"
+          style="display: none; margin-top: 10px"
+        ></div>
+      </div>
+
+      <div class="controls">
+        <div
+          style="display: flex; gap: 15px; align-items: center; flex-wrap: wrap"
+        >
+          <input
+            type="file"
+            id="fileInput"
+            accept=".json"
+            style="display: none"
+          />
+          <button class="btn btn-primary" id="loadJSONBtn">📂 Load JSON</button>
+          <button class="btn btn-info" id="loadFromDbBtn">
+            📥 Load from DB
+          </button>
+          <button class="btn btn-success" id="downloadBtn" disabled>
+            💾 Save Schema to JSON
+          </button>
+          <button class="btn btn-info" id="saveToDbBtn" disabled>
+            📤 Save to DB
+          </button>
+          <button class="btn btn-secondary" id="cypherBtn" disabled>
+            🔄 Export Property Updates
+          </button>
+          <button class="btn btn-warning" id="compareBtn" disabled>
+            📊 Compare with DB
+          </button>
+          <button class="btn btn-info" id="generateSchemaBtn" disabled>
+            🛠️ Generate Schema from DB
+          </button>
+          <div class="stats-bar" id="statsBar" style="display: none">
+            <span id="nodeCount">0 Nodes</span>
+            <span
+              id="modifiedIndicator"
+              class="modified-indicator"
+              style="display: none"
+              >● Modified</span
+            >
+            <!-- Change indicator will be added here dynamically -->
+          </div>
+        </div>
+      </div>
+
+      <div
+        id="currentSchemaInfo"
+        style="
+          background: white;
+          padding: 15px;
+          border-radius: 8px;
+          margin-bottom: 20px;
+          box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+          display: none;
+        "
+      >
+        <h4>ℹ️ Current Schema Information</h4>
+        <p><strong>Source:</strong> <span id="schemaSource">-</span></p>
+        <p><strong>Version:</strong> <span id="schemaVersion">-</span></p>
+        <p><strong>Timestamp:</strong> <span id="schemaTimestamp">-</span></p>
+      </div>
+
+      <div
+        id="comparisonResults"
+        style="
+          margin-top: 15px;
+          padding: 10px;
+          background: #f8f9fa;
+          border-radius: 4px;
+          display: none;
+        "
+      >
+        <h4>Comparison with Database Schema:</h4>
+        <p id="comparisonText">No comparison performed yet.</p>
+      </div>
+
+      <div class="editor-layout">
+        <div class="tree-panel">
+          <div class="panel-header">
+            📋 Schema Nodes
+            <input
+              type="text"
+              class="search-box"
+              id="searchBox"
+              placeholder="Search nodes..."
+              style="margin: 10px 0 0 0; width: 100%"
+            />
+          </div>
+          <div class="tree-container" id="treeContainer">
+            <div class="no-selection">
+              <p>Load a JSON file to begin</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="details-panel">
+          <div class="panel-header">✏️ Edit Details</div>
+          <div class="details-container" id="detailsContainer">
+            <div class="no-selection">
+              <p>Select a node to edit</p>
+            </div>
+            <!-- Tab structure will be dynamically inserted here by JavaScript -->
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Cypher Export Modal -->
+    <div id="cypherModal" class="modal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <span class="close-btn" id="closeCypherModalBtn">&times;</span>
+          <h2>Property Update Script Preview</h2>
+        </div>
+        <div class="modal-body">
+          <div class="alert alert-info" style="margin-bottom: 15px;">
+            <strong>ℹ️ Note:</strong> This script only updates node and relationship property descriptions. 
+            It does NOT modify the graph structure (no nodes or relationships are created/deleted).
+          </div>
+          <p>
+            Review the generated Cypher query below. Click "Confirm Export" to
+            download the .cypher file.
+          </p>
+          <textarea id="cypherPreview" readonly style="height: 400px;"></textarea>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-secondary" id="cancelCypherBtn">Cancel</button>
+          <button class="btn btn-primary" id="confirmCypherBtn">
+            Confirm Export
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Alert styles for info boxes -->
+    <style>
+      .alert {
+        padding: 12px 20px;
+        border-radius: 4px;
+        margin-bottom: 15px;
+        border: 1px solid transparent;
+      }
+      .alert-info {
+        background-color: #d1ecf1;
+        border-color: #bee5eb;
+        color: #0c5460;
+      }
+      .badge {
+        display: inline-block;
+        padding: 0.25em 0.6em;
+        font-size: 75%;
+        font-weight: 700;
+        line-height: 1;
+        text-align: center;
+        white-space: nowrap;
+        vertical-align: baseline;
+        border-radius: 0.25rem;
+      }
+      .badge-primary {
+        color: #fff;
+        background-color: #007bff;
+      }
+      .badge-info {
+        color: #fff;
+        background-color: #17a2b8;
+      }
+    </style>
+  </body>
+</html>
