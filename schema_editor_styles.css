@@ -644,3 +644,94 @@ textarea.form-control {
   border-radius: 4px;
   font-size: 13px;
 }
+
+/* Styling for Progress Modal */
+.progress-actions {
+  max-height: 300px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  padding: 10px;
+  margin-bottom: 15px;
+  background: #f9f9f9;
+  font-family: monospace;
+}
+
+.progress-action-item {
+  margin-bottom: 8px;
+  padding: 5px;
+  border-left: 3px solid #667eea;
+}
+
+.progress-action-success {
+  border-left-color: #10b981;
+}
+
+.progress-action-error {
+  border-left-color: #ef4444;
+}
+
+.progress-bar {
+  height: 20px;
+  background-color: #e2e8f0;
+  border-radius: 4px;
+  margin-bottom: 10px;
+  overflow: hidden;
+}
+
+.progress-bar-inner {
+  height: 100%;
+  background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+  width: 0;
+  transition: width 0.3s ease;
+}
+
+.progress-status {
+  text-align: center;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+/* Modified Fields Modal */
+.modified-field-item {
+  padding: 8px;
+  border-bottom: 1px solid #ddd;
+  display: flex;
+  justify-content: space-between;
+}
+
+.modified-field-item:hover {
+  background-color: #f5f5f5;
+}
+
+.modified-field-type {
+  display: inline-block;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: bold;
+  margin-right: 8px;
+}
+
+.modified-field-type-node {
+  background-color: #e2f2ff;
+  color: #0366d6;
+}
+
+.modified-field-type-relation {
+  background-color: #ffefd6;
+  color: #e36209;
+}
+
+.modified-field-id {
+  font-family: monospace;
+  color: #666;
+}
+
+.modified-field-property {
+  font-weight: bold;
+}
+
+.modified-field-values {
+  color: #666;
+  font-size: 0.9em;
+}

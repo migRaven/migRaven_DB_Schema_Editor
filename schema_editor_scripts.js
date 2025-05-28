@@ -12,7 +12,7 @@ const GLOBAL_SCHEMA_META_ID = "_migRaven_Schema"; // Added constant
 let changedProperties = {
   nodes: {}, // Format: {nodeLabel: {propertyName: {oldValue, newValue, timestamp}}}
   relationships: {}, // Format: {sourceLabel_relType_targetLabel: {propertyName: {oldValue, newValue, timestamp}}}
-  count: 0 // Gesamtzahl der geänderten Properties
+  count: 0, // Gesamtzahl der geänderten Properties
 };
 
 // ===== HELPER FUNCTIONS FOR DIFFERENTIAL UPDATES =====
