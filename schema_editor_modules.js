@@ -13,6 +13,10 @@ const SchemaEditorConfig = {
     MAX_RETRIES: 3,
     RETRY_DELAY: 1000,
   },
+  logging: {
+    cypherQueries: true,  // Enable/disable Cypher query logging
+    queryResults: false,  // Enable/disable result logging
+  },
 };
 
 const SchemaEditorState = {
@@ -376,6 +380,10 @@ const ChangeTracker = {
     `;
   },
 
+  getChangeCount() {
+    return SchemaEditorState.propertyChanges.getChangeCount();
+  },
+
   clearChanges() {
     SchemaEditorState.propertyChanges.clear();
     this.updateChangeIndicator();
@@ -461,6 +469,18 @@ const Neo4jConnection = {
       throw new Error("Not connected to Neo4j. Please test connection first.");
     }
 
+    // Log Cypher query if enabled
+    if (SchemaEditorConfig.logging.cypherQueries) {
+      console.group(`🔍 Cypher Query @ ${new Date().toLocaleTimeString()}`);
+      console.log('%cQuery:', 'color: #0080ff; font-weight: bold');
+      console.log(query);
+      if (Object.keys(params).length > 0) {
+        console.log('%cParameters:', 'color: #008000; font-weight: bold');
+        console.table(params);
+      }
+      console.groupEnd();
+    }
+
     const sessionConfig = SchemaEditorConfig.neo4j.database
       ? { database: SchemaEditorConfig.neo4j.database }
       : {};
@@ -468,24 +488,57 @@ const Neo4jConnection = {
     const session = SchemaEditorState.neo4jDriver.session(sessionConfig);
 
     try {
+      const startTime = performance.now();
       const result = await session.run(query, params);
+      const executionTime = performance.now() - startTime;
+      
+      // Log execution time and results if enabled
+      if (SchemaEditorConfig.logging.cypherQueries) {
+        console.group(`✅ Query Executed in ${executionTime.toFixed(2)}ms`);
+        console.log(`%cRecords returned: ${result.records.length}`, 'color: #008000');
+        
+        if (SchemaEditorConfig.logging.queryResults && result.records.length > 0) {
+          console.log('%cResults:', 'color: #ff6600; font-weight: bold');
+          console.table(result.records.map(r => r.toObject()));
+        }
+        console.groupEnd();
+      }
       return result.records.map((record) => {
         const obj = {};
         record.keys.forEach((key) => {
           let value = record.get(key);
           if (neo4j.isInt(value)) {
             value = value.toNumber();
-          } else if (
-            typeof value === "object" &&
-            value !== null &&
-            value.properties
-          ) {
-            value = value.properties;
+          } else if (neo4j.isNode(value)) {
+            // This is a full Neo4j Node object
+            value = {
+              ...value.properties,
+              _id: value.identity.toNumber(),
+              _labels: value.labels
+            };
+          } else if (neo4j.isRelationship(value)) {
+            // This is a full Neo4j Relationship object
+            value = {
+              ...value.properties,
+              _id: value.identity.toNumber(),
+              _type: value.type,
+              _startNodeId: value.start.toNumber(),
+              _endNodeId: value.end.toNumber()
+            };
           }
           obj[key] = value;
         });
         return obj;
       });
+    } catch (error) {
+      // Log error if enabled
+      if (SchemaEditorConfig.logging.cypherQueries) {
+        console.group(`❌ Query Failed`);
+        console.error('%cError:', 'color: #ff0000; font-weight: bold', error.message);
+        console.error('Full error:', error);
+        console.groupEnd();
+      }
+      throw error;
     } finally {
       await session.close();
     }
@@ -512,6 +565,7 @@ const SchemaOperations = {
           }
 
           SchemaEditorState.schemaData = loadedData;
+          SchemaEditorState.currentNode = null; // Reset current node selection
           SchemaEditorState.dbSchemaInfo = null;
           SchemaEditorState.localSchemaFilePath = file.name;
 
@@ -1041,6 +1095,123 @@ ORDER BY n.nodeType, n.originalLabel;`
 
     return cypherCommands.join("\n");
   },
+
+  async applyPropertyUpdatesToNeo4j(schema) {
+    if (!schema) throw new Error("No schema to apply");
+    
+    const results = {
+      nodesUpdated: 0,
+      relationshipsUpdated: 0,
+      errors: []
+    };
+
+    try {
+      // Update node properties and descriptions
+      for (const nodeType of schema.node_types) {
+        const properties = [];
+        Object.entries(nodeType.attributes || {}).forEach(
+          ([propName, propInfo]) => {
+            properties.push({
+              name: propName,
+              type: propInfo.type || "string",
+              description: propInfo.description || "",
+              indexed: propInfo.indexed || false,
+              unique: propInfo.unique || false,
+            });
+          }
+        );
+
+        if (nodeType.description !== undefined) {
+          try {
+            // Only update description and updatedAt, preserve all other fields
+            const query = `
+              MATCH (schema:_migRaven_Schema {originalLabel: $label, nodeType: 'node'})
+              SET schema.description = $description,
+                  schema.updatedAt = datetime()
+              RETURN schema.originalLabel AS updated
+            `;
+            
+            await Connection.executeQuery(query, {
+              label: nodeType.label,
+              description: nodeType.description || ""
+            });
+            
+            results.nodesUpdated++;
+          } catch (error) {
+            results.errors.push(`Error updating ${nodeType.label}: ${error.message}`);
+          }
+        }
+
+        // Update relationship descriptions only
+        for (const [relName, relInfo] of Object.entries(nodeType.relationships || {})) {
+          if (relInfo.description !== undefined) {
+            try {
+              // Only update description and updatedAt, preserve all other fields
+              const query = `
+                MATCH (source:_migRaven_Schema {originalLabel: $sourceLabel, nodeType: 'node'})
+                      -[rel:_SCHEMA_RELATIONSHIP {originalType: $relType}]->
+                      (target:_migRaven_Schema {originalLabel: $targetLabel, nodeType: 'node'})
+                SET rel.description = $description,
+                    rel.updatedAt = datetime()
+                RETURN rel.originalType AS updated
+              `;
+              
+              await Connection.executeQuery(query, {
+                sourceLabel: nodeType.label,
+                relType: relName,
+                targetLabel: relInfo.target,
+                description: relInfo.description || ""
+              });
+              
+              results.relationshipsUpdated++;
+            } catch (error) {
+              results.errors.push(`Error updating ${nodeType.label}-[${relName}]->${relInfo.target}: ${error.message}`);
+            }
+          }
+        }
+      }
+    } catch (error) {
+      results.errors.push(`General error: ${error.message}`);
+    }
+
+    return results;
+  }
+};
+
+// ===== MODULE: Logging Control =====
+const LoggingControl = {
+  enableQueryLogging() {
+    SchemaEditorConfig.logging.cypherQueries = true;
+    console.log('%c✅ Cypher query logging enabled', 'color: #008000; font-weight: bold');
+  },
+  
+  disableQueryLogging() {
+    SchemaEditorConfig.logging.cypherQueries = false;
+    console.log('%c❌ Cypher query logging disabled', 'color: #ff0000; font-weight: bold');
+  },
+  
+  enableResultLogging() {
+    SchemaEditorConfig.logging.queryResults = true;
+    console.log('%c✅ Query result logging enabled', 'color: #008000; font-weight: bold');
+  },
+  
+  disableResultLogging() {
+    SchemaEditorConfig.logging.queryResults = false;
+    console.log('%c❌ Query result logging disabled', 'color: #ff0000; font-weight: bold');
+  },
+  
+  toggleQueryLogging() {
+    SchemaEditorConfig.logging.cypherQueries = !SchemaEditorConfig.logging.cypherQueries;
+    console.log(`%c${SchemaEditorConfig.logging.cypherQueries ? '✅' : '❌'} Cypher query logging ${SchemaEditorConfig.logging.cypherQueries ? 'enabled' : 'disabled'}`, 
+      `color: ${SchemaEditorConfig.logging.cypherQueries ? '#008000' : '#ff0000'}; font-weight: bold`);
+  },
+  
+  getLoggingStatus() {
+    console.table({
+      'Cypher Queries': SchemaEditorConfig.logging.cypherQueries,
+      'Query Results': SchemaEditorConfig.logging.queryResults
+    });
+  }
 };
 
 // ===== MODULE: UI Manager =====
@@ -1118,4 +1289,5 @@ window.SchemaEditorModules = {
   Operations: SchemaOperations,
   Cypher: CypherExport,
   UI: UIManager,
+  Logging: LoggingControl,
 };

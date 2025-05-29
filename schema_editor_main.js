@@ -13,11 +13,21 @@ const {
   Operations,
   Cypher,
   UI,
+  Logging,
 } = Modules;
 
 // ===== INITIALIZATION =====
 document.addEventListener("DOMContentLoaded", function () {
   console.log("DOM fully loaded - Initializing Schema Editor");
+  
+  // Show logging info
+  console.log('%c📊 Cypher Query Logging is ENABLED by default', 'color: #0080ff; font-weight: bold');
+  console.log('%cUse these commands in the console:', 'color: #666666');
+  console.log('  CypherLogging.disable()     - Disable query logging');
+  console.log('  CypherLogging.enable()      - Enable query logging');
+  console.log('  CypherLogging.toggle()      - Toggle query logging');
+  console.log('  CypherLogging.enableResults() - Show query results');
+  console.log('  CypherLogging.status()      - Show current settings');
 
   // Initialize all event listeners
   initializeEventListeners();
@@ -155,6 +165,23 @@ async function handleFileLoad(event) {
 
     document.getElementById("statsBar").style.display = "flex";
     document.getElementById("comparisonResults").style.display = "none";
+    
+    // Auto-select first node if available
+    if (State.schemaData.node_types && State.schemaData.node_types.length > 0) {
+      // Clear details container first
+      const detailsContainer = document.getElementById("detailsContainer");
+      if (detailsContainer) {
+        detailsContainer.innerHTML = "";
+      }
+      
+      setTimeout(() => {
+        console.log('🎯 Auto-selecting first node after file load');
+        console.log(`   DOM ready check - Tree nodes: ${document.querySelectorAll(".node-header").length}`);
+        console.log(`   Schema nodes: ${State.schemaData.node_types.length}`);
+        
+        selectNode(0);
+      }, 150);
+    }
   } catch (error) {
     ErrorModule.handleError(error, "File Load", "Error loading JSON file");
   }
@@ -249,10 +276,26 @@ async function loadSchemaFromNeo4j() {
 
     // Load nodes
     Progress.update(operationId, 3, "Loading node definitions");
+    
+    // First, let's check what's actually in the database
+    const testQuery = await Connection.executeQuery(
+      `MATCH (n:_migRaven_Schema {nodeType: 'node'}) 
+       WHERE n.schemaVersion = $version
+       RETURN n
+       LIMIT 1`,
+      { version: latestVersion }
+    );
+    
+    if (testQuery.length > 0) {
+      console.log('%c🔍 Sample Node from DB:', 'color: #ff00ff; font-weight: bold');
+      console.log('Full node data:', testQuery[0].n);
+      console.log('Properties field:', testQuery[0].n.properties);
+    }
+    
     const nodeResult = await Connection.executeQuery(
       `MATCH (n:_migRaven_Schema {nodeType: 'node'}) 
        WHERE n.schemaVersion = $version
-       RETURN n.originalLabel AS label, n.description, n.properties
+       RETURN n
        ORDER BY n.originalLabel`,
       { version: latestVersion }
     );
@@ -262,46 +305,107 @@ async function loadSchemaFromNeo4j() {
     const relResult = await Connection.executeQuery(
       `MATCH (source:_migRaven_Schema {nodeType: 'node'})-[r:_SCHEMA_RELATIONSHIP]->(target:_migRaven_Schema {nodeType: 'node'})
        WHERE r.schemaVersion = $version
-       RETURN source.originalLabel AS sourceLabel, 
-              target.originalLabel AS targetLabel,
-              r.originalType AS relType,
-              r.description,
-              r.properties`,
+       RETURN source, target, r`,
       { version: latestVersion }
     );
 
+    // Debug: Log raw node data
+    console.log('%c📥 Raw Node Data from DB:', 'color: #0080ff; font-weight: bold');
+    nodeResult.forEach((record, idx) => {
+      const node = record.n;
+      console.log(`Node ${idx}: ${node.originalLabel}`);
+      console.log('  Full node:', node);
+      console.log('  Raw properties:', node.properties);
+      console.log('  Properties type:', typeof node.properties);
+      console.log('  Properties length:', node.properties ? node.properties.length : 0);
+    });
+
     // Build schema object
     const nodeTypes = [];
-    for (const node of nodeResult) {
-      const properties = JSON.parse(node.properties || "{}");
+    for (const record of nodeResult) {
+      const node = record.n;
+      let properties;
+      try {
+        properties = JSON.parse(node.properties || "{}");
+        console.log(`✅ Parsed properties for ${node.originalLabel}:`, properties);
+      } catch (e) {
+        console.error(`❌ Failed to parse properties for ${node.originalLabel}:`, e);
+        properties = {};
+      }
       const attributes = {};
 
-      for (const [propName, propInfo] of Object.entries(properties)) {
-        attributes[propName] = {
-          type: propInfo.type || "string",
-          indexed: propInfo.indexed || false,
-          unique: propInfo.unique || false,
-          description: propInfo.description || "",
-        };
+      // Properties should always be an object
+      if (typeof properties === 'object' && !Array.isArray(properties)) {
+        for (const [propName, propInfo] of Object.entries(properties)) {
+          attributes[propName] = {
+            type: propInfo.type || "string",
+            indexed: propInfo.indexed || false,
+            unique: propInfo.unique || false,
+            description: propInfo.description || "",
+          };
+        }
+      } else if (Array.isArray(properties)) {
+        // Handle legacy array format
+        console.warn(`Legacy array format detected for node ${node.label}, converting to object format`);
+        for (const prop of properties) {
+          attributes[prop.name] = {
+            type: prop.type || "string",
+            indexed: prop.indexed || false,
+            unique: prop.unique || false,
+            description: prop.description || "",
+          };
+        }
       }
 
-      nodeTypes.push({
-        label: node.label,
+      const nodeData = {
+        label: node.originalLabel,
         description: node.description || "",
         attributes,
         relationships: {},
-      });
+      };
+      
+      console.log(`📦 Built node data for ${node.originalLabel}:`);
+      console.log(`  - Attributes count: ${Object.keys(attributes).length}`);
+      console.log(`  - Attribute names: ${Object.keys(attributes).join(', ')}`);
+      
+      nodeTypes.push(nodeData);
     }
 
     // Add relationships to nodes
-    for (const rel of relResult) {
-      const sourceNode = nodeTypes.find((n) => n.label === rel.sourceLabel);
+    console.log('%c📥 Processing Relationships:', 'color: #ff6600; font-weight: bold');
+    for (const record of relResult) {
+      const source = record.source;
+      const target = record.target;
+      const rel = record.r;
+      
+      console.log(`  Relationship: ${source.originalLabel} -[${rel.originalType}]-> ${target.originalLabel}`);
+      
+      const sourceNode = nodeTypes.find((n) => n.label === source.originalLabel);
       if (sourceNode) {
-        sourceNode.relationships[rel.relType] = {
-          target: rel.targetLabel,
+        const parsedProps = rel.properties ? JSON.parse(rel.properties) : {};
+        let propObject = {};
+        
+        // Properties should be an object
+        if (typeof parsedProps === 'object' && !Array.isArray(parsedProps)) {
+          propObject = parsedProps;
+        } else if (Array.isArray(parsedProps)) {
+          // Handle legacy array format
+          console.warn(`Legacy array format detected for relationship ${rel.originalType}, converting to object format`);
+          for (const prop of parsedProps) {
+            propObject[prop.name] = {
+              type: prop.type || "string",
+              description: prop.description || "",
+            };
+          }
+        }
+        
+        sourceNode.relationships[rel.originalType] = {
+          target: target.originalLabel,
           description: rel.description || "",
-          properties: rel.properties ? JSON.parse(rel.properties) : {},
+          properties: propObject,
         };
+      } else {
+        console.error(`Source node ${source.originalLabel} not found in nodeTypes!`);
       }
     }
 
@@ -311,14 +415,44 @@ async function loadSchemaFromNeo4j() {
       description: "Schema loaded from _migRaven_Schema nodes",
       node_types: nodeTypes,
     };
+    
+    // Final debug check
+    console.log('%c📊 Final Schema Structure:', 'color: #00ff00; font-weight: bold');
+    console.log(`Total nodes: ${loadedSchema.node_types.length}`);
+    loadedSchema.node_types.slice(0, 3).forEach((node, idx) => {
+      console.log(`Node ${idx}: ${node.label}`);
+      console.log(`  - Attributes: ${Object.keys(node.attributes || {}).length}`);
+      console.log(`  - First 3 attributes:`, Object.entries(node.attributes || {}).slice(0, 3).map(([k, v]) => `${k}: ${v.type}`));
+      console.log(`  - Relationships: ${Object.keys(node.relationships || {}).length}`);
+    });
 
     State.schemaData = loadedSchema;
     State.isModified = false;
+    State.currentNode = null; // Reset current node selection
     State.dbSchemaInfo = {
       version: latestVersion,
       timestamp: latestTimestamp,
       metaId: "_migRaven_Schema_Loaded",
     };
+
+    // Debug: Log loaded schema details
+    console.log('%c🔍 Loaded Schema Details:', 'color: #ff6600; font-weight: bold');
+    loadedSchema.node_types.forEach((node, index) => {
+      console.log(`Node ${index}: ${node.label}`);
+      console.log(`  - Description: "${node.description || 'EMPTY'}"`);
+      console.log(`  - Attributes: ${Object.keys(node.attributes || {}).length}`);
+      console.log(`  - Relationships: ${Object.keys(node.relationships || {}).length}`);
+      
+      // Log first few attributes
+      Object.entries(node.attributes || {}).slice(0, 3).forEach(([attrName, attr]) => {
+        console.log(`    • ${attrName}: ${attr.type} ${attr.description ? `- ${attr.description}` : ''}`);
+      });
+      
+      // Log relationships
+      Object.entries(node.relationships || {}).forEach(([relName, rel]) => {
+        console.log(`    → ${relName} to ${rel.target} - "${rel.description || 'EMPTY'}"`);
+      });
+    });
 
     renderTreeView();
     updateStats();
@@ -331,8 +465,30 @@ async function loadSchemaFromNeo4j() {
 
     document.getElementById("statsBar").style.display = "flex";
 
+    // Ensure DOM is ready before selecting node
     if (nodeTypes.length > 0) {
-      selectNode(0);
+      // Clear details container first
+      const detailsContainer = document.getElementById("detailsContainer");
+      if (detailsContainer) {
+        detailsContainer.innerHTML = "";
+      }
+      
+      setTimeout(() => {
+        console.log('🎯 Auto-selecting first node after schema load');
+        console.log(`   DOM ready check - Tree nodes: ${document.querySelectorAll(".node-header").length}`);
+        console.log(`   Schema nodes: ${nodeTypes.length}`);
+        
+        selectNode(0);
+        
+        // Force a re-render if needed
+        setTimeout(() => {
+          const activeHeaders = document.querySelectorAll(".node-header.active");
+          if (activeHeaders.length === 0 && State.currentNode === 0) {
+            console.warn('⚠️ No active node found, forcing re-render');
+            renderNodeDetails(State.schemaData.node_types[0]);
+          }
+        }, 200);
+      }, 150);
     }
 
     Progress.complete(operationId);
@@ -362,6 +518,22 @@ async function saveSchemaToNeo4j() {
   ) {
     alert("No changes to save.");
     return;
+  }
+
+  // Check if only property descriptions were changed
+  const changeCount = Changes.getChangeCount();
+  const hasOnlyPropertyChanges = changeCount > 0 && State.isModified;
+  
+  if (hasOnlyPropertyChanges && State.dbSchemaInfo?.version === State.schemaData.version) {
+    // Only update properties without changing schema structure
+    const confirm = window.confirm(
+      "Only property descriptions have changed. Update properties without creating a new schema version?"
+    );
+    
+    if (confirm) {
+      await updatePropertiesToNeo4j();
+      return;
+    }
   }
 
   const operationId = "saveSchema";
@@ -408,6 +580,9 @@ async function saveSchemaToNeo4j() {
     const migRavenNodes = new Map();
 
     for (const nodeType of State.schemaData.node_types) {
+      // Debug: Log what we're saving
+      console.log(`💾 Saving Node: ${nodeType.label} - Description: "${nodeType.description || 'EMPTY'}"`);
+      
       const properties = {};
       for (const [attrName, attrInfo] of Object.entries(
         nodeType.attributes || {}
@@ -532,6 +707,50 @@ async function saveSchemaToNeo4j() {
       error,
       "Save Schema",
       "Failed to save schema to database"
+    );
+  }
+}
+
+// ===== PROPERTY UPDATE FUNCTION =====
+async function updatePropertiesToNeo4j() {
+  if (!State.schemaData) {
+    alert("No schema loaded.");
+    return;
+  }
+
+  if (!Config.neo4j.connected) {
+    alert("Not connected to Neo4j. Please test connection first.");
+    return;
+  }
+
+  const operationId = "updateProperties";
+  Progress.start(operationId, 2, "Updating properties in database");
+
+  try {
+    Progress.update(operationId, 1, "Applying property updates");
+    
+    const results = await Cypher.applyPropertyUpdatesToNeo4j(State.schemaData);
+    
+    Progress.update(operationId, 2, "Update complete");
+    Progress.complete(operationId);
+
+    let message = `✅ Properties updated successfully!\n`;
+    message += `Nodes updated: ${results.nodesUpdated}\n`;
+    message += `Relationships updated: ${results.relationshipsUpdated}`;
+    
+    if (results.errors.length > 0) {
+      message += `\n\n⚠️ Errors:\n${results.errors.join('\n')}`;
+    }
+
+    alert(message);
+    UI.showConnectionStatus("✅ Properties updated in database", "success");
+    
+  } catch (error) {
+    Progress.complete(operationId);
+    ErrorModule.handleError(
+      error,
+      "Update Properties",
+      "Failed to update properties in database"
     );
   }
 }
@@ -721,12 +940,17 @@ function createNodeElement(node, index) {
 
   const attrCount = Object.keys(node.attributes || {}).length;
   const relCount = Object.keys(node.relationships || {}).length;
+  const hasDescription = node.description && node.description.trim().length > 0;
 
   div.innerHTML = `
-    <div class="node-header" onclick="selectNode(${index})">
-      <div class="node-label">${node.label}</div>
+    <div class="node-header" onclick="selectNode(${index})" title="${node.description || 'No description'}">
+      <div class="node-label">
+        ${node.label}
+        ${hasDescription ? '<span style="color: #28a745; margin-left: 4px;" title="Has description">📝</span>' : ''}
+      </div>
       <div class="node-stats">${attrCount} Attr. • ${relCount} Rel.</div>
     </div>
+    ${hasDescription ? `<div class="node-description" style="font-size: 11px; color: #6c757d; padding: 2px 12px 8px 12px; font-style: italic;">${node.description.substring(0, 50)}${node.description.length > 50 ? '...' : ''}</div>` : ''}
   `;
 
   return div;
@@ -734,13 +958,27 @@ function createNodeElement(node, index) {
 
 function selectNode(index) {
   State.currentNode = index;
+  const node = State.schemaData.node_types[index];
+  
+  console.log(`📌 Selecting node ${index}: ${node.label}`);
+  console.log(`   - Description: "${node.description || 'EMPTY'}"`);
+  console.log(`   - Attributes: ${Object.keys(node.attributes || {}).length}`);
+  console.log(`   - Relationships: ${Object.keys(node.relationships || {}).length}`);
 
-  document
-    .querySelectorAll(".node-header")
-    .forEach((h) => h.classList.remove("active"));
-  document.querySelectorAll(".node-header")[index].classList.add("active");
+  const headers = document.querySelectorAll(".node-header");
+  if (headers.length === 0) {
+    console.error("❌ No node headers found in DOM!");
+    return;
+  }
+  
+  headers.forEach((h) => h.classList.remove("active"));
+  if (headers[index]) {
+    headers[index].classList.add("active");
+  } else {
+    console.error(`❌ Node header at index ${index} not found!`);
+  }
 
-  renderNodeDetails(State.schemaData.node_types[index]);
+  renderNodeDetails(node);
   openTab(null, "NodeProperties");
 }
 
@@ -1331,3 +1569,14 @@ window.addRelationshipProperty = addRelationshipProperty;
 window.selectNode = selectNode;
 window.openTab = openTab;
 window.ChangeTracker = Changes;
+window.updatePropertiesToNeo4j = updatePropertiesToNeo4j;
+
+// Make logging controls available globally
+window.CypherLogging = {
+  enable: () => Logging.enableQueryLogging(),
+  disable: () => Logging.disableQueryLogging(),
+  toggle: () => Logging.toggleQueryLogging(),
+  enableResults: () => Logging.enableResultLogging(),
+  disableResults: () => Logging.disableResultLogging(),
+  status: () => Logging.getLoggingStatus()
+};
