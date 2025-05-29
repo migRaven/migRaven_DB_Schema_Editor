@@ -839,98 +839,20 @@ async function compareWithDbSchema() {
   const comparisonDiv = document.getElementById("comparisonResults");
   const comparisonText = document.getElementById("comparisonText");
   comparisonDiv.style.display = "block";
-  comparisonText.innerHTML = "🔄 Fetching database schema...";
+  comparisonText.innerHTML = "🔄 Analyzing database structure...";
 
   try {
-    // Get database schema
-    const metaResult = await Connection.executeQuery(
-      `MATCH (meta:_migRaven_Schema {nodeType: 'metadata'}) 
-       RETURN * ORDER BY meta.schemaVersion DESC LIMIT 1`
+    // First, get the actual database structure
+    const actualDbStructure = await analyzeActualDatabase();
+
+    // Compare with current schema
+    const differences = compareSchemaWithActual(
+      State.schemaData,
+      actualDbStructure
     );
 
-    if (!metaResult.length) {
-      comparisonText.innerHTML = "⚠️ No schema found in database.";
-      return;
-    }
-
-    const dbMeta = metaResult[0];
-    let dbSchema = null;
-
-    if (dbMeta.originalSchemaData) {
-      try {
-        dbSchema = JSON.parse(dbMeta.originalSchemaData);
-      } catch (e) {
-        console.warn("Could not parse original schema data");
-      }
-    }
-
-    // Build comparison
-    const differences = [];
-    const trackedChanges = Changes.getChangesForComparison();
-
-    // Version comparison
-    if (State.schemaData.version !== dbMeta.schemaVersion) {
-      differences.push(
-        `Version: Local (${State.schemaData.version}) vs DB (${dbMeta.schemaVersion})`
-      );
-    }
-
-    // Show tracked changes
-    if (
-      trackedChanges.nodes.length > 0 ||
-      trackedChanges.relationships.length > 0
-    ) {
-      differences.push("<strong>Tracked Property Changes:</strong>");
-
-      trackedChanges.nodes.forEach((node) => {
-        node.changes.forEach((change) => {
-          differences.push(
-            `• Node "${node.label}" - ${change.property}: "${change.old}" → "${change.new}"`
-          );
-        });
-      });
-
-      trackedChanges.relationships.forEach((rel) => {
-        rel.changes.forEach((change) => {
-          differences.push(
-            `• Relationship "${rel.source}-[${rel.relType}]->${rel.target}" - ${change.property}: "${change.old}" → "${change.new}"`
-          );
-        });
-      });
-    }
-
-    // Node differences
-    if (dbSchema) {
-      const localLabels = new Set(
-        State.schemaData.node_types.map((n) => n.label)
-      );
-      const dbLabels = new Set(dbSchema.node_types.map((n) => n.label));
-
-      localLabels.forEach((label) => {
-        if (!dbLabels.has(label)) {
-          differences.push(`• Node "${label}" exists locally but not in DB`);
-        }
-      });
-
-      dbLabels.forEach((label) => {
-        if (!localLabels.has(label)) {
-          differences.push(`• Node "${label}" exists in DB but not locally`);
-        }
-      });
-    }
-
-    // Display results
-    if (differences.length === 0) {
-      comparisonText.innerHTML = "✅ Schemas are in sync.";
-    } else {
-      comparisonText.innerHTML =
-        "<strong>Differences found:</strong><br>" + differences.join("<br>");
-    }
-
-    State.dbSchemaInfo = {
-      version: dbMeta.schemaVersion,
-      timestamp: dbMeta.timestamp,
-    };
+    // Display differences
+    displaySchemaDifferences(differences, comparisonText);
   } catch (error) {
     ErrorModule.handleError(
       error,
@@ -938,6 +860,420 @@ async function compareWithDbSchema() {
       "Failed to compare schemas"
     );
     comparisonText.innerHTML = `❌ Error: ${error.message}`;
+  }
+}
+
+// Analyze the actual database structure
+async function analyzeActualDatabase() {
+  const operationId = "analyzeDb";
+  Progress.start(operationId, 4, "Analyzing database structure");
+
+  try {
+    // Step 1: Get all node labels
+    Progress.update(operationId, 1, "Fetching node labels");
+    const labelsResult = await Connection.executeQuery(
+      `CALL db.labels() YIELD label 
+       WHERE NOT (label STARTS WITH '_' OR label STARTS WITH 'p')
+       RETURN collect(label) AS labels`
+    );
+    const labels = labelsResult[0]?.labels || [];
+
+    // Step 2: Get node properties for each label
+    Progress.update(operationId, 2, "Analyzing node properties");
+    const nodeStructure = {};
+
+    for (const label of labels) {
+      // Get property keys and sample values
+      const propsResult = await Connection.executeQuery(
+        `MATCH (n:\`${label}\`)
+         WITH n LIMIT 100
+         WITH keys(n) AS propKeys
+         UNWIND propKeys AS key
+         RETURN DISTINCT key
+         ORDER BY key`
+      );
+
+      const properties = {};
+      for (const row of propsResult) {
+        const propKey = row.key;
+
+        // Get property type - simplified approach
+        let propertyType = "string"; // default
+        try {
+          const sampleResult = await Connection.executeQuery(
+            `MATCH (n:\`${label}\`)
+             WHERE n[$propKey] IS NOT NULL
+             RETURN n[$propKey] AS value
+             LIMIT 1`,
+            { propKey: propKey }
+          );
+
+          if (sampleResult.length > 0) {
+            const sampleValue = sampleResult[0].value;
+            // Determine type based on JavaScript type
+            if (typeof sampleValue === "number") {
+              propertyType = Number.isInteger(sampleValue)
+                ? "integer"
+                : "float";
+            } else if (typeof sampleValue === "boolean") {
+              propertyType = "boolean";
+            } else if (Array.isArray(sampleValue)) {
+              propertyType = "array";
+            } else if (sampleValue instanceof Date) {
+              propertyType = "datetime";
+            } else {
+              propertyType = "string";
+            }
+          }
+        } catch (e) {
+          console.warn(
+            `Could not determine type for ${label}.${propKey}:`,
+            e.message
+          );
+        }
+
+        properties[propKey] = {
+          type: propertyType,
+          indexed: false, // Will check indexes separately
+          unique: false,
+          description: "",
+        };
+      }
+
+      nodeStructure[label] = {
+        label: label,
+        properties: properties,
+        relationships: {},
+      };
+    }
+
+    // Step 3: Get relationships
+    Progress.update(operationId, 3, "Analyzing relationships");
+    const relsResult = await Connection.executeQuery(
+      `CALL db.relationshipTypes() YIELD relationshipType
+       WHERE NOT (relationshipType STARTS WITH '_' OR relationshipType STARTS WITH 'p')
+       RETURN collect(relationshipType) AS types`
+    );
+    const relTypes = relsResult[0]?.types || [];
+
+    // Get relationship details
+    for (const relType of relTypes) {
+      const relDetailsResult = await Connection.executeQuery(
+        `MATCH (a)-[r:\`${relType}\`]->(b)
+         WITH labels(a)[0] AS sourceLabel, labels(b)[0] AS targetLabel, r
+         WHERE NOT (sourceLabel STARTS WITH '_' OR sourceLabel STARTS WITH 'p' 
+                OR targetLabel STARTS WITH '_' OR targetLabel STARTS WITH 'p')
+       
+         RETURN DISTINCT sourceLabel, targetLabel, keys(r) AS propKeys`
+      );
+
+      for (const detail of relDetailsResult) {
+        if (nodeStructure[detail.sourceLabel]) {
+          nodeStructure[detail.sourceLabel].relationships[relType] = {
+            target: detail.targetLabel,
+            properties: {},
+            description: "",
+          };
+
+          // Add relationship properties
+          for (const propKey of detail.propKeys || []) {
+            nodeStructure[detail.sourceLabel].relationships[relType].properties[
+              propKey
+            ] = {
+              type: "string",
+              description: "",
+            };
+          }
+        }
+      }
+    }
+
+    // Step 4: Check indexes
+    Progress.update(operationId, 4, "Checking indexes");
+    try {
+      const indexResult = await Connection.executeQuery(
+        `SHOW INDEXES YIELD name, labelsOrTypes, properties, type
+         WHERE type IN ['BTREE', 'RANGE']
+         RETURN labelsOrTypes, properties`
+      );
+
+      for (const idx of indexResult) {
+        const label = idx.labelsOrTypes[0];
+        const prop = idx.properties[0];
+        if (nodeStructure[label] && nodeStructure[label].properties[prop]) {
+          nodeStructure[label].properties[prop].indexed = true;
+        }
+      }
+    } catch (indexError) {
+      // SHOW INDEXES might not be supported in older Neo4j versions
+      console.warn("Could not retrieve index information:", indexError.message);
+      // Try alternative method for older versions
+      try {
+        const constraintsResult = await Connection.executeQuery(
+          `CALL db.constraints() YIELD description
+           RETURN description`
+        );
+        // Parse constraints to find indexed properties
+        for (const row of constraintsResult) {
+          const desc = row.description;
+          // Extract label and property from constraint description
+          const match = desc.match(/\((\w+):(\w+)\)/);
+          if (match) {
+            const [, varName, label] = match;
+            const propMatch = desc.match(/\.(\w+)\s+IS\s+UNIQUE/);
+            if (
+              propMatch &&
+              nodeStructure[label] &&
+              nodeStructure[label].properties[propMatch[1]]
+            ) {
+              nodeStructure[label].properties[propMatch[1]].indexed = true;
+              nodeStructure[label].properties[propMatch[1]].unique = true;
+            }
+          }
+        }
+      } catch (e) {
+        console.warn("Could not retrieve constraint information:", e.message);
+      }
+    }
+
+    Progress.complete(operationId);
+    return nodeStructure;
+  } catch (error) {
+    Progress.complete(operationId);
+    throw error;
+  }
+}
+
+// Compare schema with actual database
+function compareSchemaWithActual(schema, actualDb) {
+  const differences = {
+    missingInSchema: {
+      nodes: [],
+      relationships: [],
+      properties: [],
+    },
+    missingInDb: {
+      nodes: [],
+      relationships: [],
+      properties: [],
+    },
+    typeMismatches: [],
+  };
+
+  // Create maps for easier lookup
+  const schemaNodes = new Map();
+  schema.node_types.forEach((node) => {
+    schemaNodes.set(node.label, node);
+  });
+
+  // Check what's in DB but not in schema
+  for (const [label, dbNode] of Object.entries(actualDb)) {
+    const schemaNode = schemaNodes.get(label);
+
+    if (!schemaNode) {
+      // Entire node is missing in schema
+      differences.missingInSchema.nodes.push({
+        label: label,
+        properties: Object.keys(dbNode.properties),
+        relationships: Object.keys(dbNode.relationships),
+      });
+    } else {
+      // Check properties
+      for (const [propName, propInfo] of Object.entries(dbNode.properties)) {
+        if (!schemaNode.attributes[propName]) {
+          differences.missingInSchema.properties.push({
+            node: label,
+            property: propName,
+            type: propInfo.type,
+          });
+        }
+      }
+
+      // Check relationships
+      for (const [relName, relInfo] of Object.entries(dbNode.relationships)) {
+        if (!schemaNode.relationships[relName]) {
+          differences.missingInSchema.relationships.push({
+            source: label,
+            type: relName,
+            target: relInfo.target,
+          });
+        }
+      }
+    }
+  }
+
+  // Check what's in schema but not in DB
+  for (const schemaNode of schema.node_types) {
+    if (!actualDb[schemaNode.label]) {
+      differences.missingInDb.nodes.push({
+        label: schemaNode.label,
+      });
+    }
+  }
+
+  return differences;
+}
+
+// Display schema differences
+function displaySchemaDifferences(differences, container) {
+  let html = '<div class="comparison-results">';
+
+  const totalDiffs =
+    differences.missingInSchema.nodes.length +
+    differences.missingInSchema.relationships.length +
+    differences.missingInSchema.properties.length +
+    differences.missingInDb.nodes.length;
+
+  if (totalDiffs === 0) {
+    html +=
+      '<p style="color: #28a745;">✅ Schema is in sync with database!</p>';
+  } else {
+    html += `<h3>Found ${totalDiffs} differences:</h3>`;
+
+    // Missing in schema (found in DB)
+    if (differences.missingInSchema.nodes.length > 0) {
+      html += '<div class="diff-section">';
+      html +=
+        '<h4 style="color: #dc3545;">🆕 New nodes found in database:</h4>';
+      html += "<ul>";
+      differences.missingInSchema.nodes.forEach((node) => {
+        html += `<li><strong>${node.label}</strong> (${node.properties.length} properties, ${node.relationships.length} relationships)</li>`;
+      });
+      html += "</ul>";
+      html += "</div>";
+    }
+
+    if (differences.missingInSchema.relationships.length > 0) {
+      html += '<div class="diff-section">';
+      html +=
+        '<h4 style="color: #dc3545;">🔗 New relationships found in database:</h4>';
+      html += "<ul>";
+      differences.missingInSchema.relationships.forEach((rel) => {
+        html += `<li>${rel.source} -[${rel.type}]-> ${rel.target}</li>`;
+      });
+      html += "</ul>";
+      html += "</div>";
+    }
+
+    if (differences.missingInSchema.properties.length > 0) {
+      html += '<div class="diff-section">';
+      html +=
+        '<h4 style="color: #dc3545;">📋 New properties found in database:</h4>';
+      html += "<ul>";
+      differences.missingInSchema.properties.forEach((prop) => {
+        html += `<li>${prop.node}.${prop.property} (${prop.type})</li>`;
+      });
+      html += "</ul>";
+      html += "</div>";
+    }
+
+    // Add update button
+    if (
+      differences.missingInSchema.nodes.length > 0 ||
+      differences.missingInSchema.relationships.length > 0 ||
+      differences.missingInSchema.properties.length > 0
+    ) {
+      html += '<div style="margin-top: 20px;">';
+      html +=
+        '<button class="btn btn-primary" onclick="updateSchemaFromDb()">🔄 Update Schema with Database Changes</button>';
+      html += "</div>";
+    }
+  }
+
+  html += "</div>";
+  container.innerHTML = html;
+
+  // Store differences for update function
+  window.pendingSchemaDifferences = differences;
+}
+
+// Update schema with database changes
+async function updateSchemaFromDb() {
+  if (!window.pendingSchemaDifferences) {
+    alert("No differences to update.");
+    return;
+  }
+
+  const diffs = window.pendingSchemaDifferences;
+  const confirmMsg =
+    `This will add to your schema:\n` +
+    `- ${diffs.missingInSchema.nodes.length} new nodes\n` +
+    `- ${diffs.missingInSchema.relationships.length} new relationships\n` +
+    `- ${diffs.missingInSchema.properties.length} new properties\n\n` +
+    `Continue?`;
+
+  if (!confirm(confirmMsg)) {
+    return;
+  }
+
+  try {
+    // Re-analyze database to get full structure
+    const actualDb = await analyzeActualDatabase();
+
+    // Add missing nodes
+    for (const missingNode of diffs.missingInSchema.nodes) {
+      const dbNode = actualDb[missingNode.label];
+      if (dbNode) {
+        const attributes = {};
+        for (const [propName, propInfo] of Object.entries(dbNode.properties)) {
+          attributes[propName] = propInfo;
+        }
+
+        State.schemaData.node_types.push({
+          label: dbNode.label,
+          description: `Auto-discovered from database`,
+          attributes: attributes,
+          relationships: dbNode.relationships,
+        });
+      }
+    }
+
+    // Add missing properties
+    for (const missingProp of diffs.missingInSchema.properties) {
+      const schemaNode = State.schemaData.node_types.find(
+        (n) => n.label === missingProp.node
+      );
+      if (schemaNode) {
+        schemaNode.attributes[missingProp.property] = {
+          type: missingProp.type,
+          indexed: false,
+          unique: false,
+          description: "Auto-discovered from database",
+        };
+      }
+    }
+
+    // Add missing relationships
+    for (const missingRel of diffs.missingInSchema.relationships) {
+      const schemaNode = State.schemaData.node_types.find(
+        (n) => n.label === missingRel.source
+      );
+      if (schemaNode) {
+        const dbNode = actualDb[missingRel.source];
+        if (dbNode && dbNode.relationships[missingRel.type]) {
+          schemaNode.relationships[missingRel.type] =
+            dbNode.relationships[missingRel.type];
+        }
+      }
+    }
+
+    // Update UI
+    State.isModified = true;
+    UI.updateModifiedStatus(true);
+    renderTreeView();
+    updateStats();
+
+    // Clear comparison results
+    document.getElementById("comparisonResults").style.display = "none";
+    window.pendingSchemaDifferences = null;
+
+    alert("✅ Schema updated with database changes!");
+  } catch (error) {
+    ErrorModule.handleError(
+      error,
+      "Schema Update",
+      "Failed to update schema from database"
+    );
   }
 }
 
@@ -1659,6 +1995,7 @@ window.selectNode = selectNode;
 window.openTab = openTab;
 window.ChangeTracker = Changes;
 window.updatePropertiesToNeo4j = updatePropertiesToNeo4j;
+window.updateSchemaFromDb = updateSchemaFromDb;
 
 // Make logging controls available globally
 window.CypherLogging = {
